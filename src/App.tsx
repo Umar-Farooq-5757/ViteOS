@@ -1,9 +1,11 @@
 import { useState } from "react";
 import "./App.css";
 import Notes from "./components/Notes";
+import Clock from "./components/Clock";
 
 function App() {
   const [isNotesOpen, setIsNotesOpen] = useState<boolean>(false);
+  const [isClockOpen, setIsClockOpen] = useState<boolean>(false);
   return (
     <main className="bg-slate-900 text-white min-h-screen p-4">
       <div className="flex justify-start flex-col items-start gap-4">
@@ -14,8 +16,16 @@ function App() {
           <img className="size-14" src="/img/notes.png" alt="" />
           <p className="text-sm">Notes</p>
         </div>
+        <div
+          onClick={() => setIsClockOpen(true)}
+          onDoubleClick={() => setIsClockOpen(true)}
+          className="flex flex-col items-center">
+          <img className="size-14" src="/img/clock.png" alt="" />
+          <p className="text-sm">Clock</p>
+        </div>
       </div>
       {isNotesOpen && <Notes onClose={() => setIsNotesOpen(false)} />}
+      {isClockOpen && <Clock onClose={() => setIsClockOpen(false)} />}
     </main>
   );
 }
