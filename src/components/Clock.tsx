@@ -2,11 +2,11 @@ import type React from "react";
 import { format } from "date-fns";
 import { Rnd } from "react-rnd";
 
-interface NotesProps {
+interface ClockProps {
   onClose: () => void;
 }
 
-const Clock: React.FC<NotesProps> = ({ onClose }) => {
+const Clock: React.FC<ClockProps> = ({ onClose }) => {
   const now = new Date();
   const time = format(now, "h:mm");
   const amPm = format(now, "a");
