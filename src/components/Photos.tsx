@@ -14,7 +14,7 @@ const Photos: React.FC<PhotosProps> = ({ onClose }) => {
     "/gallery/3.jpg",
     "/gallery/4.jfif",
   ];
-  const [currentImage, setCurrentImage] = useState<number>(1);
+  const [currentImage, setCurrentImage] = useState<number>(0);
 
   const changeImage = (direction: string) => {
     if (direction === "back" && currentImage > 0) {
