@@ -9,8 +9,8 @@ function App() {
   const [isClockOpen, setIsClockOpen] = useState<boolean>(false);
   const [isPhotosOpen, setIsPhotosOpen] = useState<boolean>(false);
   return (
-    <main className="bg-slate-900 text-white min-h-screen p-4">
-      <div className="flex justify-start flex-col items-start gap-4">
+    <main className="bg-slate-900 text-white min-h-screen p-6">
+      <div className="flex justify-start flex-col items-start gap-6">
         <div
           onClick={() => setIsNotesOpen(true)}
           onDoubleClick={() => setIsNotesOpen(true)}
@@ -34,8 +34,8 @@ function App() {
         </div>
       </div>
       {isNotesOpen && <Notes onClose={() => setIsNotesOpen(false)} />}
-      {isClockOpen && <Clock onClose={() => setIsClockOpen(false)} />}
       {isPhotosOpen && <Photos onClose={() => setIsPhotosOpen(false)} />}
+      {isClockOpen && <Clock onClose={() => setIsClockOpen(false)} />}
     </main>
   );
 }

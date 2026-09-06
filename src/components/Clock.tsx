@@ -1,4 +1,4 @@
-import type React from "react";
+import React, { useState, useEffect } from "react";
 import { format } from "date-fns";
 import { Rnd } from "react-rnd";
 
@@ -7,10 +7,30 @@ interface ClockProps {
 }
 
 const Clock: React.FC<ClockProps> = ({ onClose }) => {
-  const now = new Date();
-  const time = format(now, "h:mm");
+  const [now, setNow] = useState(new Date());
+
+  // Update time every second
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setNow(new Date());
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  const time = format(now, "h:mm:ss");
   const amPm = format(now, "a");
   const date = format(now, "EEEE, d MMM");
+
+  // Calculate angles (in degrees)
+  const seconds = now.getSeconds();
+  const minutes = now.getMinutes();
+  const hours = now.getHours();
+
+  const secondDeg = (seconds / 60) * 360;
+  const minuteDeg = ((minutes + seconds / 60) / 60) * 360;
+  const hourDeg = (((hours % 12) + minutes / 60) / 12) * 360;
+
   return (
     <Rnd
       default={{
@@ -20,29 +40,74 @@ const Clock: React.FC<ClockProps> = ({ onClose }) => {
         height: 300,
       }}
       bounds="parent"
-      dragHandleClassName="handle"
-      className={`bg-slate-900 border border-slate-700 rounded-lg shadow-xl`}>
-      <section className="border border-gray-500 min-h-80 w-120 bg-slate-800">
-        <div className="handle cursor-grab flex items-center justify-between px-2 py-1">
-          <p>Clock</p>
+      dragHandleClassName="handle">
+      <section className="flex flex-col h-120 bg-slate-700 text-white select-none w-150 border border-slate-700 rounded-lg shadow-xl">
+        {/* Title Bar */}
+        <div className="handle cursor-grab flex items-center justify-between px-4 py-2 bg-slate-900">
           <div className="flex items-center gap-2">
-            <button className="size-4 text-xs bg-yellow-500 rounded-full"></button>
-            <button className="size-4 text-xs bg-green-500 rounded-full"></button>
+            <img className="size-5" src="/img/clock.png" alt="clock" />
+            <span className="text-sm font-medium">Clock</span>
+          </div>
+          <div className="flex items-center gap-2 cursor-default">
+            <button className="size-4 bg-yellow-500 rounded-full hover:opacity-80" />
+            <button className="size-4 bg-green-500 rounded-full hover:opacity-80" />
             <button
               onClick={(e) => {
                 e.stopPropagation();
                 onClose();
               }}
-              className="size-4 text-xs bg-red-500 rounded-full flex items-center justify-center"></button>
+              className="size-4 bg-red-500 rounded-full hover:opacity-80"
+            />
           </div>
         </div>
-        <div className="h-0.5 w-full bg-slate-700"></div>
-        <div className="bg-white/10 backdrop-blur-md border border-white/20 px-8 py-4 rounded-xl">
-          <div className="flex items-end gap-2">
-            <p className="font-extrabold text-4xl">{time}</p>
-            <p>{amPm}</p>
+
+        <div className="h-0.5 w-full bg-slate-700" />
+
+        {/* Content */}
+        <div className="flex-1 flex flex-col items-center justify-around p-4 bg-slate-800 rounded-b-lg">
+          {/* Container holding image + overlapping hands */}
+          <div className="relative size-80 flex items-center justify-center">
+            {/* Clock Face Image */}
+            <img
+              className="size-full object-contain pointer-events-none"
+              src="/clock2.png"
+              alt="Clock Face"
+            />
+            {/* Center Pin */}
+            <div className="absolute size-3 bg-slate-900 rounded-full z-40 border-2 border-white" />
+            {/* Hour Hand */}
+            <div
+              className="absolute w-1.5 h-14 bg-slate-900 rounded-full z-10 border border-white"
+              style={{
+                transformOrigin: "bottom center",
+                transform: `translateY(-50%) rotate(${hourDeg}deg)`,
+              }}
+            />
+            {/* Minute Hand */}
+            <div
+              className="absolute w-1 h-20 bg-slate-800 rounded-full z-20 border border-white"
+              style={{
+                transformOrigin: "bottom center",
+                transform: `translateY(-50%) rotate(${minuteDeg}deg)`,
+              }}
+            />
+            {/* Second Hand */}
+            <div
+              className="absolute w-0.5 h-22 bg-red-500 rounded-full z-30"
+              style={{
+                transformOrigin: "bottom center",
+                transform: `translateY(-50%) rotate(${secondDeg}deg)`,
+              }}
+            />
           </div>
-          <div className="opacity-70">{date}</div>
+          {/* Digital Time & Date */}
+          <div className="flex flex-col items-center justify-center mt-2">
+            <div className="flex items-baseline gap-2">
+              <p className="font-extrabold text-3xl tracking-wider">{time}</p>
+              <p className="text-sm font-medium text-slate-400">{amPm}</p>
+            </div>
+            <div className="text-sm text-slate-400">{date}</div>
+          </div>
         </div>
       </section>
     </Rnd>
