@@ -12,6 +12,46 @@ interface Note {
 }
 
 const Notes: React.FC<NotesProps> = ({ onClose }) => {
+  const [isMaximized, setIsMaximized] = useState(false);
+  const [prevSize, setPrevSize] = useState<{
+    width: number | string;
+    height: number | string;
+    x: number;
+    y: number;
+  }>({
+    width: 400,
+    height: 300,
+    x: 250,
+    y: 250,
+  });
+  const [currentSize, setCurrentSize] = useState<{
+    width: number | string;
+    height: number | string;
+    x: number;
+    y: number;
+  }>({
+    width: 400,
+    height: 300,
+    x: 250,
+    y: 250,
+  });
+
+  const toggleMaximize = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (isMaximized) {
+      setCurrentSize(prevSize);
+      setIsMaximized(false);
+    } else {
+      setPrevSize({
+        width: currentSize.width,
+        height: currentSize.height,
+        x: currentSize.x,
+        y: currentSize.y,
+      });
+      setIsMaximized(true);
+    }
+  };
+
   const [notes, setNotes] = useState<Note[]>(() => {
     const savedNotes = localStorage.getItem("my_app_notes");
     if (savedNotes) {
@@ -28,13 +68,15 @@ const Notes: React.FC<NotesProps> = ({ onClose }) => {
   });
 
   const [currentNote, setCurrentNote] = useState<string>(
-    notes.length > 0 ? notes[0].title : ""
+    notes.length > 0 ? notes[0].title : "",
   );
 
   const activeNote = notes.find((n) => n.title === currentNote) || notes[0];
 
   const [titleInput, setTitleInput] = useState<string>(activeNote?.title || "");
-  const [contentInput, setContentInput] = useState<string>(activeNote?.content || "");
+  const [contentInput, setContentInput] = useState<string>(
+    activeNote?.content || "",
+  );
 
   useEffect(() => {
     localStorage.setItem("my_app_notes", JSON.stringify(notes));
@@ -91,18 +133,48 @@ const Notes: React.FC<NotesProps> = ({ onClose }) => {
 
   return (
     <Rnd
-      default={{ x: 400, y: 400, width: 400, height: 300 }}
+      size={
+        isMaximized
+          ? { width: "100%", height: "100%" }
+          : { width: currentSize.width, height: currentSize.height }
+      }
+      position={
+        isMaximized ? { x: 0, y: 0 } : { x: currentSize.x, y: currentSize.y }
+      }
+      onDragStop={(_e, d) => {
+        if (!isMaximized) {
+          setCurrentSize((prev) => ({ ...prev, x: d.x, y: d.y }));
+        }
+      }}
+      onResizeStop={(_e, _direction, ref, _delta, position) => {
+        if (!isMaximized) {
+          setCurrentSize({
+            width: ref.style.width,
+            height: ref.style.height,
+            ...position,
+          });
+        }
+      }}
+      disableDragging={isMaximized}
+      enableResizing={!isMaximized}
       bounds="parent"
       dragHandleClassName="handle">
-      <section className="flex flex-col h-120 bg-slate-700 text-white w-170 border border-slate-700 rounded-lg shadow-xl">
+      <section
+        className={`flex flex-col ${isMaximized ? "w-full h-full" : "h-120 w-170"} bg-slate-700 text-white border border-slate-700 rounded-lg shadow-xl overflow-hidden select-none`}>
         <div className="handle cursor-grab flex items-center justify-between px-4 py-2 bg-slate-900">
           <div className="flex items-center gap-2">
-            <img className="size-5" src="/img/notes.png" alt="clock" />
+            <img className="size-5" src="/apps/notes.png" alt="clock" />
             <span className="text-sm font-medium">Notes</span>
           </div>
           <div className="flex items-center gap-2 cursor-default">
-            <button className="size-4 bg-yellow-500 rounded-full hover:opacity-80" />
-            <button className="size-4 bg-green-500 rounded-full hover:opacity-80" />
+            <button
+              onClick={(e) => e.stopPropagation()}
+              className="size-4 bg-yellow-500 rounded-full hover:opacity-80"
+            />
+            <button
+              onClick={toggleMaximize}
+              className="size-4 bg-green-500 rounded-full hover:opacity-80"
+            />
             <button
               onClick={(e) => {
                 e.stopPropagation();

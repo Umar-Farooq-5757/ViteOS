@@ -8,6 +8,29 @@ interface ClockProps {
 
 const Clock: React.FC<ClockProps> = ({ onClose }) => {
   const [now, setNow] = useState(new Date());
+  const [isMaximized, setIsMaximized] = useState(false);
+  const [prevSize, setPrevSize] = useState<{
+    width: number | string;
+    height: number | string;
+    x: number;
+    y: number;
+  }>({
+    width: 400,
+    height: 300,
+    x: 150,
+    y: 150,
+  });
+  const [currentSize, setCurrentSize] = useState<{
+    width: number | string;
+    height: number | string;
+    x: number;
+    y: number;
+  }>({
+    width: 400,
+    height: 300,
+    x: 150,
+    y: 150,
+  });
 
   // Update time every second
   useEffect(() => {
@@ -17,6 +40,22 @@ const Clock: React.FC<ClockProps> = ({ onClose }) => {
 
     return () => clearInterval(timer);
   }, []);
+
+  const toggleMaximize = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (isMaximized) {
+      setCurrentSize(prevSize);
+      setIsMaximized(false);
+    } else {
+      setPrevSize({
+        width: currentSize.width,
+        height: currentSize.height,
+        x: currentSize.x,
+        y: currentSize.y,
+      });
+      setIsMaximized(true);
+    }
+  };
 
   const time = format(now, "h:mm:ss");
   const amPm = format(now, "a");
@@ -33,24 +72,49 @@ const Clock: React.FC<ClockProps> = ({ onClose }) => {
 
   return (
     <Rnd
-      default={{
-        x: 200,
-        y: 200,
-        width: 400,
-        height: 300,
+      size={
+        isMaximized
+          ? { width: "100%", height: "100%" }
+          : { width: currentSize.width, height: currentSize.height }
+      }
+      position={
+        isMaximized ? { x: 0, y: 0 } : { x: currentSize.x, y: currentSize.y }
+      }
+      onDragStop={(_e, d) => {
+        if (!isMaximized) {
+          setCurrentSize((prev) => ({ ...prev, x: d.x, y: d.y }));
+        }
       }}
+      onResizeStop={(_e, _direction, ref, _delta, position) => {
+        if (!isMaximized) {
+          setCurrentSize({
+            width: ref.style.width,
+            height: ref.style.height,
+            ...position,
+          });
+        }
+      }}
+      disableDragging={isMaximized}
+      enableResizing={!isMaximized}
       bounds="parent"
       dragHandleClassName="handle">
-      <section className="flex flex-col h-120 bg-slate-700 text-white select-none w-150 border border-slate-700 rounded-lg shadow-xl">
+      <section
+        className={`flex flex-col ${isMaximized ? "w-full h-full" : "h-120 w-150"} bg-slate-700 text-white select-none border border-slate-700 rounded-lg shadow-xl overflow-hidden`}>
         {/* Title Bar */}
         <div className="handle cursor-grab flex items-center justify-between px-4 py-2 bg-slate-900">
           <div className="flex items-center gap-2">
-            <img className="size-5" src="/img/clock.png" alt="clock" />
+            <img className="size-5" src="/apps/clock.png" alt="clock" />
             <span className="text-sm font-medium">Clock</span>
           </div>
           <div className="flex items-center gap-2 cursor-default">
-            <button className="size-4 bg-yellow-500 rounded-full hover:opacity-80" />
-            <button className="size-4 bg-green-500 rounded-full hover:opacity-80" />
+            <button
+              onClick={(e) => e.stopPropagation()}
+              className="size-4 bg-yellow-500 rounded-full hover:opacity-80"
+            />
+            <button
+              onClick={toggleMaximize}
+              className="size-4 bg-green-500 rounded-full hover:opacity-80"
+            />
             <button
               onClick={(e) => {
                 e.stopPropagation();
