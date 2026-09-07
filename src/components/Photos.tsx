@@ -1,5 +1,5 @@
 import type React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { IoArrowBackSharp, IoArrowForwardSharp } from "react-icons/io5";
 import { Rnd } from "react-rnd";
 
@@ -15,6 +15,14 @@ const Photos: React.FC<PhotosProps> = ({ onClose }) => {
     "/gallery/4.jfif",
   ];
   const [currentImage, setCurrentImage] = useState<number>(0);
+
+  // Preload images into the browser cache on mount
+  useEffect(() => {
+    images.forEach((src) => {
+      const img = new Image();
+      img.src = src;
+    });
+  }, [images]);
 
   const changeImage = (direction: string) => {
     if (direction === "back") {

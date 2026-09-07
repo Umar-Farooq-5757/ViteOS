@@ -5,7 +5,7 @@ import Clock from "./components/Clock";
 import Photos from "./components/Photos";
 
 function App() {
-  const [isNotesOpen, setIsNotesOpen] = useState<boolean>(false);
+  const [isNotesOpen, setIsNotesOpen] = useState<boolean>(true);
   const [isClockOpen, setIsClockOpen] = useState<boolean>(false);
   const [isPhotosOpen, setIsPhotosOpen] = useState<boolean>(false);
   return (
