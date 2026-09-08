@@ -99,9 +99,9 @@ const Photos: React.FC<PhotosProps> = ({ onClose }) => {
       bounds="parent"
       dragHandleClassName="handle">
       <section
-        className={`flex flex-col bg-slate-700 text-white select-none ${isMaximized ? "w-full h-full" : "w-150 h-120"} border border-slate-700 rounded-lg shadow-xl overflow-hidden`}>
+        className={`flex flex-col bg-black text-white select-none ${isMaximized ? "w-full h-full" : "w-150 h-120"} border border-white/15 rounded-lg shadow-xl overflow-hidden`}>
         {/* Title Bar */}
-        <div className="handle cursor-grab flex items-center justify-between px-4 py-2 bg-slate-900 shrink-0">
+        <div className="handle cursor-grab flex items-center justify-between px-4 py-2 bg-white/4 shrink-0">
           <div className="flex items-center gap-2">
             <img className="size-5" src="/apps/photos.png" alt="photos" />
             <span className="text-sm font-medium">Photos</span>
@@ -124,9 +124,9 @@ const Photos: React.FC<PhotosProps> = ({ onClose }) => {
             />
           </div>
         </div>
-        <div className="h-0.5 w-full bg-slate-700 shrink-0"></div>
+        <div className="h-0.5 w-full bg-white/15 shrink-0"></div>
         {/* Content Area */}
-        <div className="relative flex-1 bg-slate-800 flex items-center justify-center overflow-hidden p-4">
+        <div className="relative flex-1 bg-white/8 flex items-center justify-center overflow-hidden p-4">
           <button
             className="absolute top-1/2 -translate-y-1/2 p-2 bg-gray-700/80 hover:bg-gray-700 rounded-full left-3 z-10"
             onClick={() => changeImage("back")}>

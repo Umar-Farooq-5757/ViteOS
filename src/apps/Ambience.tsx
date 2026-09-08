@@ -76,9 +76,9 @@ const Ambience: React.FC<AmbienceProps> = ({ onClose }) => {
       bounds="parent"
       dragHandleClassName="handle">
       <section
-        className={`flex overflow-hidden flex-col ${isMaximized ? "w-full h-full" : "h-120 w-150"} bg-slate-700 text-white select-none border border-slate-700 rounded-lg shadow-xl`}>
+        className={`flex overflow-hidden flex-col ${isMaximized ? "w-full h-full" : "h-120 w-150"} bg-black text-white select-none border border-white/15 rounded-lg shadow-xl`}>
         {/* Title Bar */}
-        <div className="handle cursor-grab flex items-center justify-between px-4 py-2 bg-slate-900">
+        <div className="handle cursor-grab flex items-center justify-between px-4 py-2 bg-white/4">
           <div className="flex items-center gap-2">
             <img className="size-5" src="/apps/ambience.png" alt="clock" />
             <span className="text-sm font-medium">Ambience</span>
@@ -102,8 +102,8 @@ const Ambience: React.FC<AmbienceProps> = ({ onClose }) => {
           </div>
         </div>
 
-        <div className="h-0.5 w-full bg-slate-700" />
-        <div className="bg-slate-800 h-full w-full">
+        <div className="h-0.5 w-full bg-white/15" />
+        <div className="bg-white/8 h-full w-full">
           <AmbienceMixer />
         </div>
       </section>

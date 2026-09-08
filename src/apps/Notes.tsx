@@ -160,8 +160,8 @@ const Notes: React.FC<NotesProps> = ({ onClose }) => {
       bounds="parent"
       dragHandleClassName="handle">
       <section
-        className={`flex flex-col ${isMaximized ? "w-full h-full" : "h-120 w-170"} bg-slate-700 text-white border border-slate-700 rounded-lg shadow-xl overflow-hidden select-none`}>
-        <div className="handle cursor-grab flex items-center justify-between px-4 py-2 bg-slate-900">
+        className={`flex flex-col ${isMaximized ? "w-full h-full" : "h-120 w-170"} bg-black text-white border border-slate-700 rounded-lg shadow-xl overflow-hidden select-none`}>
+        <div className="handle cursor-grab flex items-center justify-between px-4 py-2 bg-white/4">
           <div className="flex items-center gap-2">
             <img className="size-5" src="/apps/notes.png" alt="clock" />
             <span className="text-sm font-medium">Notes</span>
@@ -186,12 +186,12 @@ const Notes: React.FC<NotesProps> = ({ onClose }) => {
         </div>
         <div className="h-0.5 w-full bg-slate-700"></div>
         <div className="rounded-b-lg flex gap-2 p-0.5 h-full overflow-y-auto">
-          <div className="bg-slate-800 w-40 px-2 py-2 rounded-md overflow-y-auto">
+          <div className="bg-white/8 w-40 px-2 py-2 rounded-md overflow-y-auto">
             {notes.map((note) => (
               <div
                 key={note.title}
-                className={`group flex items-center justify-between hover:bg-slate-700 px-2 py-2 rounded-md cursor-pointer ${
-                  currentNote === note.title && "bg-slate-700"
+                className={`group flex items-center justify-between hover:bg-white/15 px-2 py-2 rounded-md cursor-pointer ${
+                  currentNote === note.title && "bg-white/15"
                 }`}
                 onClick={() => setCurrentNote(note.title)}>
                 <span className="truncate pr-2">{note.title}</span>
@@ -208,7 +208,7 @@ const Notes: React.FC<NotesProps> = ({ onClose }) => {
               <FaPlus className="size-4 mx-auto" />
             </div>
           </div>
-          <div className="bg-slate-800 grow px-2 py-1 rounded-md overflow-y-auto">
+          <div className="bg-white/8 grow px-2 py-1 rounded-md overflow-y-auto">
             {notes.length > 0 ? (
               <div>
                 <input

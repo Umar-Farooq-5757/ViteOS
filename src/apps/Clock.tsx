@@ -99,9 +99,9 @@ const Clock: React.FC<ClockProps> = ({ onClose }) => {
       bounds="parent"
       dragHandleClassName="handle">
       <section
-        className={`flex flex-col ${isMaximized ? "w-full h-full" : "h-120 w-150"} bg-slate-700 text-white select-none border border-slate-700 rounded-lg shadow-xl overflow-hidden`}>
+        className={`flex flex-col ${isMaximized ? "w-full h-full" : "h-120 w-150"} bg-black text-white select-none border border-white/15 rounded-lg shadow-xl overflow-hidden`}>
         {/* Title Bar */}
-        <div className="handle cursor-grab flex items-center justify-between px-4 py-2 bg-slate-900">
+        <div className="handle cursor-grab flex items-center justify-between px-4 py-2 bg-white/4">
           <div className="flex items-center gap-2">
             <img className="size-5" src="/apps/clock.png" alt="clock" />
             <span className="text-sm font-medium">Clock</span>
@@ -125,10 +125,10 @@ const Clock: React.FC<ClockProps> = ({ onClose }) => {
           </div>
         </div>
 
-        <div className="h-0.5 w-full bg-slate-700" />
+        <div className="h-0.5 w-full bg-white/15" />
 
         {/* Content */}
-        <div className="flex-1 flex flex-col items-center justify-around p-4 bg-slate-800 rounded-b-lg">
+        <div className="flex-1 flex flex-col items-center justify-around p-4 bg-white/8 rounded-b-lg">
           {/* Container holding image + overlapping hands */}
           <div className="relative size-80 flex items-center justify-center">
             {/* Clock Face Image */}
