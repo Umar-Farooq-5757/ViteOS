@@ -451,7 +451,7 @@ const ViteOSRelay: React.FC<ViteOSRelayProps> = ({ onClose }) => {
           <form
             onSubmit={handleSendMessage}
             className="p-3 bg-black/50 border-t border-slate-800">
-            <div className="bg-white/4 border border-slate-700/80 rounded-lg p-2 focus-within:border-purple-500">
+            <div className="bg-white/4 border border-slate-700/80 rounded-lg p-2 focus-within:border-white">
               <input
                 type="text"
                 value={newMessage}

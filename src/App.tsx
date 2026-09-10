@@ -6,6 +6,7 @@ import Clock from "./apps/Clock";
 import Ambience from "./apps/Ambience";
 import ViteOSRelay from "./apps/ViteOSRelay";
 import UniqueClock from "./components/UniqueClock";
+import NodeExplorer from "./apps/NodeExplorer";
 
 function App() {
   const [isNotesOpen, setIsNotesOpen] = useState<boolean>(false);
@@ -13,6 +14,7 @@ function App() {
   const [isPhotosOpen, setIsPhotosOpen] = useState<boolean>(false);
   const [isAmbienceOpen, setIsAmbienceOpen] = useState<boolean>(false);
   const [isViteOSRelayOpen, setIsViteOSRelayOpen] = useState<boolean>(false);
+  const [isNodeExplorerOpen, setIsNodeExplorerOpen] = useState<boolean>(false);
   return (
     <main className="text-white min-h-screen p-2">
       <div className="flex justify-start flex-col items-center max-w-26 gap-6">
@@ -51,6 +53,13 @@ function App() {
           <img className="size-14" src="/apps/viteosrelay.png" alt="" />
           <p className="text-xs">ViteOS Relay</p>
         </div>
+        <div
+          onClick={() => setIsNodeExplorerOpen(true)}
+          onDoubleClick={() => setIsNodeExplorerOpen(true)}
+          className="flex flex-col items-center gap-2">
+          <img className="size-14" src="/apps/nodeexplorer.png" alt="" />
+          <p className="text-xs">Node Explorer</p>
+        </div>
       </div>
       <UniqueClock />
       {isNotesOpen && <Notes onClose={() => setIsNotesOpen(false)} />}
@@ -60,6 +69,7 @@ function App() {
       {isViteOSRelayOpen && (
         <ViteOSRelay onClose={() => setIsViteOSRelayOpen(false)} />
       )}
+      {isNodeExplorerOpen && <NodeExplorer onClose={() => setIsNodeExplorerOpen(false)} />}
     </main>
   );
 }
