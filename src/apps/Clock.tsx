@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { format } from "date-fns";
 import { Rnd } from "react-rnd";
+import { cn } from "../lib/utils";
+import { FaRegWindowRestore, FaWindowMinimize } from "react-icons/fa";
+import { IoClose } from "react-icons/io5";
 
 interface ClockProps {
   onClose: () => void;
+  style: string;
 }
 
-const Clock: React.FC<ClockProps> = ({ onClose }) => {
+const Clock: React.FC<ClockProps> = ({ onClose, style }) => {
   const [now, setNow] = useState(new Date());
   const [isMaximized, setIsMaximized] = useState(false);
   const [prevSize, setPrevSize] = useState<{
@@ -99,42 +103,87 @@ const Clock: React.FC<ClockProps> = ({ onClose }) => {
       bounds="parent"
       dragHandleClassName="handle">
       <section
-        className={`flex flex-col ${isMaximized ? "w-full h-full" : "h-120 w-150"} bg-black text-white select-none border border-white/15 rounded-lg shadow-xl overflow-hidden`}>
+        className={cn(
+          `flex flex-col ${isMaximized ? "w-full h-full" : "h-120 w-150"} select-none border border-white/15 shadow-xl overflow-hidden`,
+          style === "vite" && "rounded-lg bg-black",
+        )}>
         {/* Title Bar */}
-        <div className="handle cursor-grab flex items-center justify-between px-4 py-2 bg-white/4">
-          <div className="flex items-center gap-2">
-            <img className="size-5" src="/apps/clock.png" alt="clock" />
-            <span className="text-sm font-medium">Clock</span>
-          </div>
-          <div className="flex items-center gap-2 cursor-default">
-            <button
-              onClick={(e) => e.stopPropagation()}
-              className="size-4 bg-yellow-500 rounded-full hover:opacity-80"
-            />
-            <button
-              onClick={toggleMaximize}
-              className="size-4 bg-green-500 rounded-full hover:opacity-80"
-            />
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                onClose();
-              }}
-              className="size-4 bg-red-500 rounded-full hover:opacity-80"
-            />
-          </div>
+        <div
+          className={cn(
+            "handle cursor-grab flex items-center justify-between px-4 py-1",
+            style === "vite" && "bg-white/4",
+            style === "98" && "bg-[#0844AA]",
+          )}>
+          {style === "vite" && (
+            <>
+              <div className="flex items-center gap-2">
+                <img className="size-5" src="/apps/clock.png" alt="clock" />
+                <span className="text-sm font-medium">Clock</span>
+              </div>
+              <div className="flex items-center gap-2 cursor-default">
+                <button
+                  onClick={(e) => e.stopPropagation()}
+                  className="size-4 bg-yellow-500 rounded-full hover:opacity-80"
+                />
+                <button
+                  onClick={toggleMaximize}
+                  className="size-4 bg-green-500 rounded-full hover:opacity-80"
+                />
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onClose();
+                  }}
+                  className="size-4 bg-red-500 rounded-full hover:opacity-80"
+                />
+              </div>
+            </>
+          )}
+          {style === "98" && (
+            <>
+              <div className="flex items-center gap-2">
+                <img className="size-5" src="/apps/clock.png" alt="clock" />
+                <span className="text-sm font-medium text-white">Clock</span>
+              </div>
+              <div className="flex items-center gap-2 cursor-default">
+                <button
+                  onClick={(e) => e.stopPropagation()}
+                  className="bg-[#C0C0C0] size-4.5 flex items-center justify-center">
+                  <FaWindowMinimize className="text-black size-3" />
+                </button>
+                <button
+                  onClick={toggleMaximize}
+                  className="bg-[#C0C0C0] size-4.5 flex items-center justify-center">
+                  <FaRegWindowRestore className="text-black size-3" />
+                </button>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onClose();
+                  }}
+                  className="bg-[#C0C0C0] size-4.5 flex items-center justify-center">
+                  <IoClose className="text-black size-3" />
+                </button>
+              </div>
+            </>
+          )}
         </div>
 
-        <div className="h-0.5 w-full bg-white/15" />
+        {style === "vite" && <div className="h-0.5 w-full bg-white/15" />}
 
         {/* Content */}
-        <div className="flex-1 flex flex-col items-center justify-around p-4 bg-white/8 rounded-b-lg">
+        <div
+          className={cn(
+            "flex-1 flex flex-col items-center justify-around p-4",
+            style === "vite" && "bg-white/8 rounded-b-lg",
+            style === "98" && "bg-[#C0C0C0]",
+          )}>
           {/* Container holding image + overlapping hands */}
           <div className="relative size-80 flex items-center justify-center">
             {/* Clock Face Image */}
             <img
               className="size-full object-contain pointer-events-none"
-              src="/clock2.png"
+              src={style === "vite" ? "/clock2.png" : "clock.png"}
               alt="Clock Face"
             />
             {/* Center Pin */}
@@ -168,9 +217,9 @@ const Clock: React.FC<ClockProps> = ({ onClose }) => {
           <div className="flex flex-col items-center justify-center mt-2">
             <div className="flex items-baseline gap-2">
               <p className="font-extrabold text-3xl tracking-wider">{time}</p>
-              <p className="text-sm font-medium text-slate-400">{amPm}</p>
+              <p className="text-sm font-medium">{amPm}</p>
             </div>
-            <div className="text-sm text-slate-400">{date}</div>
+            <div className="text-sm">{date}</div>
           </div>
         </div>
       </section>

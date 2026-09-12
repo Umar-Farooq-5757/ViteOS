@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { IoIosSearch } from "react-icons/io";
 import { Rnd } from "react-rnd";
 import { ImNpm } from "react-icons/im";
-import { IoCheckmark, IoCopyOutline } from "react-icons/io5";
+import { IoArrowBackSharp, IoCheckmark, IoCopyOutline } from "react-icons/io5";
 import { CgSpinner } from "react-icons/cg";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -10,7 +10,7 @@ import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
 import rehypeRaw from "rehype-raw";
 
-interface NodeExplorerProps {
+interface NpmExplorerProps {
   onClose: () => void;
 }
 
@@ -32,7 +32,7 @@ const packagesToShow = [
   "@umarfarooq57/tasky",
 ];
 
-const NodeExplorer: React.FC<NodeExplorerProps> = ({ onClose }) => {
+const NpmExplorer: React.FC<NpmExplorerProps> = ({ onClose }) => {
   const [copied, setCopied] = useState(false);
   const [data, setData] = useState<any>(null);
   const [inputValue, setInputValue] = useState("");
@@ -164,8 +164,8 @@ const NodeExplorer: React.FC<NodeExplorerProps> = ({ onClose }) => {
         {/* Title Bar */}
         <div className="handle cursor-grab flex items-center justify-between px-4 py-2 bg-white/4 shrink-0">
           <div className="flex items-center gap-2">
-            <img className="size-5" src="/apps/nodeexplorer.png" alt="clock" />
-            <span className="text-sm font-medium">Node Explorer</span>
+            <img className="size-5" src="/apps/npmexplorer.png" alt="clock" />
+            <span className="text-sm font-medium">Npm Explorer</span>
           </div>
           <div className="flex items-center gap-2 cursor-default">
             <button
@@ -259,20 +259,30 @@ const NodeExplorer: React.FC<NodeExplorerProps> = ({ onClose }) => {
             <div className="py-4 px-1 overflow-y-auto flex-1 min-h-0 space-y-4">
               {/* Header */}
               <div className="flex items-start justify-between gap-4">
-                <div className="max-w-3/4">
-                  <h1 className="font-bold text-2xl flex items-center gap-2">
-                    {data.name}
-                    {latestVersion && (
-                      <span className="text-xs text-white/50 font-mono">
-                        v{latestVersion}
-                      </span>
+                <div className="max-w-3/4 flex items-start gap-3">
+                  <button
+                    onClick={() => {
+                      setData(null);
+                      setInputValue("");
+                    }}
+                    className="p-1 rounded-md hover:bg-white/8">
+                    <IoArrowBackSharp />
+                  </button>
+                  <div>
+                    <h1 className="font-bold text-2xl flex items-center gap-2">
+                      {data.name}
+                      {latestVersion && (
+                        <span className="text-xs text-white/50 font-mono">
+                          v{latestVersion}
+                        </span>
+                      )}
+                    </h1>
+                    {data.description && (
+                      <p className="text-sm text-white/80 mt-1">
+                        {data.description}
+                      </p>
                     )}
-                  </h1>
-                  {data.description && (
-                    <p className="text-sm text-white/80 mt-1">
-                      {data.description}
-                    </p>
-                  )}
+                  </div>
                 </div>
                 {data.name && (
                   <button
@@ -494,4 +504,4 @@ const NodeExplorer: React.FC<NodeExplorerProps> = ({ onClose }) => {
   );
 };
 
-export default NodeExplorer;
+export default NpmExplorer;
