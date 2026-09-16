@@ -118,7 +118,7 @@ const Photos: React.FC<PhotosProps> = ({ onClose, style }) => {
           className={cn(
             "handle cursor-grab flex items-center justify-between px-4 py-1",
             style === "vite" && "bg-white/4",
-            style === "98" && "bg-[#0844AA]",
+            style === "98" && "bg-linear-to-r from-[#020D88] to-[#107FCD]",
           )}>
           {style === "vite" && (
             <>
@@ -202,7 +202,7 @@ const Photos: React.FC<PhotosProps> = ({ onClose, style }) => {
         {currentImage !== null && (
           <div
             className={cn(
-              "relative flex-1 flex items-center justify-center overflow-hidden p-4 gap-1",
+              "relative flex-1 flex items-center justify-center overflow-hidden p-4 gap-2",
               style === "vite" && "bg-white/8",
               style === "98" && "bg-[#c0c0c0]",
             )}>
@@ -213,7 +213,7 @@ const Photos: React.FC<PhotosProps> = ({ onClose, style }) => {
                   "absolute top-6 right-11 p-0.5",
                   style === "vite" && "rounded-full bg-white/15",
                   style === "98" &&
-                    "bg-[#d9d9d9] shadow-[1px_1px_1px_1px_black] active:shadow-[-1px_-1px_1px_1px_black]",
+                    "bg-[#b2b2b2] shadow-[1px_1px_1px_1px_black,-1px_-1px_1px_1px_white] active:shadow-[-1px_-1px_1px_1px_black,1px_1px_1px_1px_white]",
                 )}>
                 <IoClose />
               </button>
@@ -223,7 +223,7 @@ const Photos: React.FC<PhotosProps> = ({ onClose, style }) => {
                   style === "vite" &&
                     "p-2 bg-gray-700/80 hover:bg-gray-700 rounded-full",
                   style === "98" &&
-                    "p-1 bg-[#d9d9d9] shadow-[1px_1px_1px_1px_black] active:shadow-[-1px_-1px_1px_1px_black]",
+                    "p-1 bg-[#b2b2b2] shadow-[1px_1px_1px_1px_black,-1px_-1px_1px_1px_white] active:shadow-[-1px_-1px_1px_1px_black,1px_1px_1px_1px_white]",
                 )}
                 onClick={() => changeImage("back")}>
                 {style === "vite" ? (
@@ -243,7 +243,7 @@ const Photos: React.FC<PhotosProps> = ({ onClose, style }) => {
                   style === "vite" &&
                     "p-2 bg-gray-700/80 hover:bg-gray-700 rounded-full",
                   style === "98" &&
-                    "p-1 bg-[#d9d9d9] shadow-[1px_1px_1px_1px_black] active:shadow-[-1px_-1px_1px_1px_black]",
+                    "p-1 bg-[#b2b2b2] shadow-[1px_1px_1px_1px_black,-1px_-1px_1px_1px_white] active:shadow-[-1px_-1px_1px_1px_black,1px_1px_1px_1px_white]",
                 )}
                 onClick={() => changeImage("forward")}>
                 {style === "vite" ? (

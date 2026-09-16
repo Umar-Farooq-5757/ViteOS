@@ -112,7 +112,7 @@ const Clock: React.FC<ClockProps> = ({ onClose, style }) => {
           className={cn(
             "handle cursor-grab flex items-center justify-between px-4 py-1",
             style === "vite" && "bg-white/4",
-            style === "98" && "bg-[#0844AA]",
+            style === "98" && "bg-linear-to-r from-[#020D88] to-[#107FCD]",
           )}>
           {style === "vite" && (
             <>

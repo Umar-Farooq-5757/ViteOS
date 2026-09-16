@@ -2,16 +2,24 @@ import React, { useState } from "react";
 import { IoIosSearch } from "react-icons/io";
 import { Rnd } from "react-rnd";
 import { ImNpm } from "react-icons/im";
-import { IoArrowBackSharp, IoCheckmark, IoCopyOutline } from "react-icons/io5";
+import {
+  IoArrowBackSharp,
+  IoCheckmark,
+  IoClose,
+  IoCopyOutline,
+} from "react-icons/io5";
 import { CgSpinner } from "react-icons/cg";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
 import rehypeRaw from "rehype-raw";
+import { cn } from "../lib/utils";
+import { FaRegWindowRestore, FaWindowMinimize } from "react-icons/fa";
 
 interface NpmExplorerProps {
   onClose: () => void;
+  style: string;
 }
 
 const packagesToShow = [
@@ -32,7 +40,7 @@ const packagesToShow = [
   "@umarfarooq57/tasky",
 ];
 
-const NpmExplorer: React.FC<NpmExplorerProps> = ({ onClose }) => {
+const NpmExplorer: React.FC<NpmExplorerProps> = ({ onClose, style }) => {
   const [copied, setCopied] = useState(false);
   const [data, setData] = useState<any>(null);
   const [inputValue, setInputValue] = useState("");
@@ -158,45 +166,103 @@ const NpmExplorer: React.FC<NpmExplorerProps> = ({ onClose }) => {
       minWidth={450}
       minHeight={350}>
       <section
-        className={`flex flex-col ${
-          isMaximized ? "w-full h-full" : "h-150 w-200"
-        } bg-black text-white select-none border border-white/15 rounded-lg shadow-xl overflow-hidden`}>
+        className={cn(
+          `flex flex-col ${isMaximized ? "w-full h-full" : "h-150 w-200"} select-none border border-white/15 shadow-xl overflow-hidden`,
+          style === "vite" && "rounded-lg bg-black",
+        )}>
         {/* Title Bar */}
-        <div className="handle cursor-grab flex items-center justify-between px-4 py-2 bg-white/4 shrink-0">
-          <div className="flex items-center gap-2">
-            <img className="size-5" src="/apps/npmexplorer.png" alt="clock" />
-            <span className="text-sm font-medium">Npm Explorer</span>
-          </div>
-          <div className="flex items-center gap-2 cursor-default">
-            <button
-              onClick={(e) => e.stopPropagation()}
-              className="size-4 bg-yellow-500 rounded-full hover:opacity-80"
-            />
-            <button
-              onClick={toggleMaximize}
-              className="size-4 bg-green-500 rounded-full hover:opacity-80"
-            />
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                onClose();
-              }}
-              className="size-4 bg-red-500 rounded-full hover:opacity-80"
-            />
-          </div>
+        <div
+          className={cn(
+            "handle cursor-grab flex items-center justify-between px-4 py-1",
+            style === "vite" && "bg-white/4",
+            style === "98" && "bg-linear-to-r from-[#020D88] to-[#107FCD]",
+          )}>
+          {style === "vite" && (
+            <>
+              <div className="flex items-center gap-2">
+                <img
+                  className="size-5"
+                  src="/apps/npmexplorer.png"
+                  alt="clock"
+                />
+                <span className="text-sm font-medium">Npm Explorer</span>
+              </div>
+              <div className="flex items-center gap-2 cursor-default">
+                <button
+                  onClick={(e) => e.stopPropagation()}
+                  className="size-4 bg-yellow-500 rounded-full hover:opacity-80"
+                />
+                <button
+                  onClick={toggleMaximize}
+                  className="size-4 bg-green-500 rounded-full hover:opacity-80"
+                />
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onClose();
+                  }}
+                  className="size-4 bg-red-500 rounded-full hover:opacity-80"
+                />
+              </div>
+            </>
+          )}
+          {style === "98" && (
+            <>
+              <div className="flex items-center gap-2">
+                <img
+                  className="size-5"
+                  src="/apps/npmexplorer.png"
+                  alt="clock"
+                />
+                <span className="text-sm font-medium text-white">
+                  Npm Explorer
+                </span>
+              </div>
+              <div className="flex items-center gap-2 cursor-default">
+                <button
+                  onClick={(e) => e.stopPropagation()}
+                  className="bg-[#C0C0C0] size-4.5 flex items-center justify-center">
+                  <FaWindowMinimize className="text-black size-3" />
+                </button>
+                <button
+                  onClick={toggleMaximize}
+                  className="bg-[#C0C0C0] size-4.5 flex items-center justify-center">
+                  <FaRegWindowRestore className="text-black size-3" />
+                </button>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onClose();
+                  }}
+                  className="bg-[#C0C0C0] size-4.5 flex items-center justify-center">
+                  <IoClose className="text-black size-3" />
+                </button>
+              </div>
+            </>
+          )}
         </div>
 
-        <div className="h-0.5 w-full bg-white/15 shrink-0" />
+        {style === "vite" && <div className="h-0.5 w-full bg-white/15" />}
 
         {/* Content Body */}
-        <div className="bg-white/8 flex-1 flex flex-col py-3 px-3 overflow-hidden min-h-0 node-explorer">
+        <div
+          className={cn(
+            "flex-1 flex flex-col py-3 px-3 overflow-hidden min-h-0 node-explorer",
+            style === "vite" && "bg-white/8",
+            style === "98" && "bg-[#c0c0c0]",
+          )}>
           {/* Search Form */}
           <form
             onSubmit={(e) => {
               e.preventDefault();
               fetchPackageData(inputValue);
             }}
-            className="bg-white/15 flex justify-between items-center text-xs rounded-md px-3 py-2 border border-transparent focus-within:border-white transition-colors shrink-0">
+            className={cn(
+              "flex justify-between items-center text-xs px-3 py-2 border border-transparent shrink-0",
+              style === "vite" &&
+                "bg-white/15 focus-within:border-white transition-colors rounded-md",
+              style === "98" && "bg-[#b0b0b0]",
+            )}>
             <input
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
@@ -207,12 +273,19 @@ const NpmExplorer: React.FC<NpmExplorerProps> = ({ onClose }) => {
             <button
               type="submit"
               disabled={isLoading || !inputValue.trim()}
-              className="text-black text-sm bg-white flex items-center gap-1 rounded-md px-4 py-1.5 hover:opacity-80 disabled:opacity-50 cursor-pointer shrink-0">
-              {isLoading ? (
-                <CgSpinner className="animate-spin text-sm" />
-              ) : (
-                <IoIosSearch />
-              )}
+              className={cn(
+                "text-black text-sm flex items-center gap-1 px-4 py-1.5 shrink-0",
+                style === "vite" &&
+                  "rounded-md cursor-pointer bg-white hover:opacity-80 disabled:opacity-50",
+                style === "98" &&
+                  "bg-[#9a9a9a] shadow-[1px_1px_1px_1px_black,-1px_-1px_1px_1px_white] active:shadow-[-1px_-1px_1px_1px_black,1px_1px_1px_1px_white]",
+              )}>
+              {style === "vite" &&
+                (isLoading ? (
+                  <CgSpinner className="animate-spin text-sm" />
+                ) : (
+                  <IoIosSearch />
+                ))}
               <span>search</span>
             </button>
           </form>
@@ -244,9 +317,21 @@ const NpmExplorer: React.FC<NpmExplorerProps> = ({ onClose }) => {
                     setInputValue(pkg);
                     fetchPackageData(pkg);
                   }}
-                  className="flex items-center gap-1 cursor-pointer">
-                  <div className="size-1.5 bg-green-500 rounded-full" />
-                  <div className="border-b border-white/30 hover:border-green-500 hover:text-green-500 transition-all text-xs">
+                  className={cn(
+                    "flex items-center gap-1",
+                    style === "vite" && "cursor-pointer",
+                  )}>
+                  {style === "vite" && (
+                    <div className="size-1.5 bg-green-500 rounded-full" />
+                  )}
+                  <div
+                    className={cn(
+                      "text-xs",
+                      style === "vite" &&
+                        "border-b border-white/30 hover:border-green-500 hover:text-green-500 transition-all",
+                      style === "98" &&
+                        "bg-[#b0b0b0] px-2 py-1 shadow-[1px_1px_1px_1px_black,-1px_-1px_1px_1px_white] active:shadow-[-1px_-1px_1px_1px_black,1px_1px_1px_1px_white]",
+                    )}>
                     {pkg}
                   </div>
                 </div>
@@ -272,13 +357,23 @@ const NpmExplorer: React.FC<NpmExplorerProps> = ({ onClose }) => {
                     <h1 className="font-bold text-2xl flex items-center gap-2">
                       {data.name}
                       {latestVersion && (
-                        <span className="text-xs text-white/50 font-mono">
+                        <span
+                          className={cn(
+                            "text-xs font-mono",
+                            style === "vite" && "text-white/50",
+                            style === "98" && "text-black/60",
+                          )}>
                           v{latestVersion}
                         </span>
                       )}
                     </h1>
                     {data.description && (
-                      <p className="text-sm text-white/80 mt-1">
+                      <p
+                        className={cn(
+                          "text-sm mt-1",
+                          style === "vite" && "text-white/80",
+                          style === "98" && "text-black/80",
+                        )}>
                         {data.description}
                       </p>
                     )}
@@ -292,22 +387,37 @@ const NpmExplorer: React.FC<NpmExplorerProps> = ({ onClose }) => {
                         "_blank",
                       )
                     }
-                    className="flex items-center gap-2 border-2 border-white/50 px-3 py-1 cursor-pointer hover:bg-white hover:text-black shrink-0 transition-colors">
+                    className={cn(
+                      "flex items-center gap-2 px-3 py-1 shrink-0",
+                      style === "vite" &&
+                        "border-2 border-white/50 hover:bg-white hover:text-black transition-colors cursor-pointer",
+                      style === "98" &&
+                        "bg-[#a9a9a9] shadow-[1px_1px_1px_1px_black,-1px_-1px_1px_1px_white] active:shadow-[-1px_-1px_1px_1px_black,1px_1px_1px_1px_white]",
+                    )}>
                     <ImNpm />
                     <span>View on npm</span>
                   </button>
                 )}
               </div>
 
-              <div className="w-full h-0.5 bg-white/15" />
+              {style === "vite" && <div className="w-full h-0.5 bg-white/15" />}
 
               {/* Get Started & Maintainers Row */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div className="md:col-span-2">
-                  <p className="text-sm font-semibold text-white/70 mb-2">
+                  <p
+                    className={cn(
+                      "text-sm mb-2",
+                      style === "vite" && "text-white/70 font-semibold",
+                    )}>
                     Get started
                   </p>
-                  <div className="bg-black rounded-md py-2 px-4 flex items-center justify-between">
+                  <div
+                    className={cn(
+                      "py-2 px-4 flex items-center justify-between",
+                      style === "vite" && "bg-black rounded-md",
+                      style === "98" && "bg-[#a9a9a9]",
+                    )}>
                     <div className="flex items-center gap-3 opacity-70 text-sm font-mono truncate">
                       <span>npm</span>
                       <span>install</span>
@@ -315,7 +425,12 @@ const NpmExplorer: React.FC<NpmExplorerProps> = ({ onClose }) => {
                     </div>
                     <button
                       onClick={() => handleCopy(`npm install ${data.name}`)}
-                      className="hover:bg-white/15 p-2 rounded-full transition-all shrink-0"
+                      className={cn(
+                        "p-2 transition-all shrink-0",
+                        style === "vite" && "hover:bg-white/15 rounded-full",
+                        style === "98" &&
+                          "bg-[#9a9a9a] shadow-[1px_1px_1px_1px_black,-1px_-1px_1px_1px_white] active:shadow-[-1px_-1px_1px_1px_black,1px_1px_1px_1px_white]",
+                      )}
                       title="Copy install command">
                       {copied ? <IoCheckmark /> : <IoCopyOutline />}
                     </button>
@@ -323,7 +438,11 @@ const NpmExplorer: React.FC<NpmExplorerProps> = ({ onClose }) => {
                 </div>
 
                 <div>
-                  <p className="text-sm font-semibold text-white/70 mb-2">
+                  <p
+                    className={cn(
+                      "text-sm mb-2",
+                      style === "vite" && "text-white/70 font-semibold",
+                    )}>
                     Maintainers
                   </p>
                   {maintainers.length > 0 ? (
@@ -331,7 +450,13 @@ const NpmExplorer: React.FC<NpmExplorerProps> = ({ onClose }) => {
                       {maintainers.map((maintainer: any, idx: number) => (
                         <div
                           key={maintainer.name || idx}
-                          className="hover:text-green-500 hover:underline cursor-pointer text-xs"
+                          className={cn(
+                            "text-xs",
+                            style === "vite" &&
+                              "hover:text-green-500 hover:underline cursor-pointer",
+                            style === "98" &&
+                              "bg-[#a9a9a9] px-1 py-0.5 shadow-[1px_1px_1px_1px_black,-1px_-1px_1px_1px_white] active:shadow-[-1px_-1px_1px_1px_black,1px_1px_1px_1px_white]",
+                          )}
                           onClick={() =>
                             window.open(
                               `https://npmjs.com/~${maintainer.name}`,
@@ -348,20 +473,28 @@ const NpmExplorer: React.FC<NpmExplorerProps> = ({ onClose }) => {
                 </div>
               </div>
 
-              <div className="w-full h-0.5 bg-white/15" />
+              {style === "vite" && <div className="w-full h-0.5 bg-white/15" />}
 
               {/* Keywords & Dependencies Row */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {keywords.length > 0 && (
                   <div>
-                    <p className="text-sm font-semibold text-white/70 mb-2">
+                    <p
+                      className={cn(
+                        "text-sm mb-2",
+                        style === "vite" && "text-white/70 font-semibold",
+                      )}>
                       Keywords
                     </p>
                     <div className="flex items-center gap-2 flex-wrap max-h-28 overflow-y-auto">
                       {keywords.map((keyword: string, idx: number) => (
                         <div
                           key={idx}
-                          className="bg-white/10 rounded-sm py-0.5 px-2 text-xs">
+                          className={cn(
+                            "py-0.5 px-2 text-xs",
+                            style === "vite" && "bg-white/10 rounded-sm",
+                            style === "98" && "bg-[#a9a9a9]",
+                          )}>
                           {keyword}
                         </div>
                       ))}
@@ -370,7 +503,11 @@ const NpmExplorer: React.FC<NpmExplorerProps> = ({ onClose }) => {
                 )}
 
                 <div>
-                  <p className="text-sm font-semibold text-white/70 mb-2">
+                  <p
+                    className={cn(
+                      "text-sm mb-2",
+                      style === "vite" && "text-white/70 font-semibold",
+                    )}>
                     Dependencies ({Object.keys(dependencies).length})
                   </p>
                   {Object.keys(dependencies).length > 0 ? (
@@ -379,13 +516,23 @@ const NpmExplorer: React.FC<NpmExplorerProps> = ({ onClose }) => {
                         ([depName, depVersion]) => (
                           <div
                             key={depName}
-                            className="hover:text-green-500 hover:underline cursor-pointer text-xs"
+                            className={cn(
+                              "text-xs",
+                              style === "vite" &&
+                                "hover:text-green-500 hover:underline cursor-pointer",
+                              style === "98" &&
+                                "bg-[#a9a9a9] px-2 py-0.5 my-0.5 shadow-[1px_1px_1px_1px_black,-1px_-1px_1px_1px_white] active:shadow-[-1px_-1px_1px_1px_black,1px_1px_1px_1px_white]",
+                            )}
                             onClick={() => {
                               setInputValue(depName);
                               fetchPackageData(depName);
                             }}>
                             {depName}{" "}
-                            <span className="text-white/50 text-[10px]">
+                            <span
+                              className={cn(
+                                "text-[10px]",
+                                style === "vite" && "text-white/50",
+                              )}>
                               ({depVersion as string})
                             </span>
                           </div>
@@ -400,15 +547,25 @@ const NpmExplorer: React.FC<NpmExplorerProps> = ({ onClose }) => {
                 </div>
               </div>
 
-              <div className="w-full h-0.5 bg-white/15" />
+              {style === "vite" && <div className="w-full h-0.5 bg-white/15" />}
 
               {/* Readme */}
               {data.readme ? (
                 <div className="mt-2">
-                  <p className="text-sm font-semibold text-white/70 mb-2">
+                  <p
+                    className={cn(
+                      "text-sm mb-2",
+                      style === "vite" && "text-white/70 font-semibold",
+                    )}>
                     Readme
                   </p>
-                  <div className="prose prose-invert prose-sm max-w-none bg-black/40 p-4 rounded-lg border border-white/10 overflow-x-auto text-white/90">
+                  <div
+                    className={cn(
+                      "prose prose-invert prose-sm max-w-none p-4 border overflow-x-auto",
+                      style === "vite" &&
+                        "text-white/90 bg-black/40 rounded-lg border-white/10",
+                      style === "98" && "bg-[#a9a9a9] border-[#8a8a8a]",
+                    )}>
                     <ReactMarkdown
                       remarkPlugins={[remarkGfm]}
                       rehypePlugins={[rehypeRaw]}
@@ -438,7 +595,11 @@ const NpmExplorer: React.FC<NpmExplorerProps> = ({ onClose }) => {
                             </SyntaxHighlighter>
                           ) : (
                             <code
-                              className="bg-white/10 px-1.5 py-0.5 rounded text-xs text-blue-400 font-mono"
+                              className={cn(
+                                "px-1.5 py-0.5 text-xs font-mono",
+                                style === "vite" && "bg-white/10 text-blue-400 rounded",
+                                style==='98'&&"bg-[#9a9a9a]"
+                              )}
                               {...props}>
                               {children}
                             </code>
@@ -464,7 +625,10 @@ const NpmExplorer: React.FC<NpmExplorerProps> = ({ onClose }) => {
                         ),
                         li: ({ node, ...props }) => (
                           <li
-                            className="text-sm text-white/90 leading-relaxed"
+                            className={cn(
+                              "text-sm leading-relaxed",
+                              style === "vite" && "text-white/90",
+                            )}
                             {...props}
                           />
                         ),

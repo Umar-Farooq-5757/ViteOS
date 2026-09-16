@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { FaPlay } from "react-icons/fa";
+import { FaPlay, FaRegWindowRestore, FaWindowMinimize } from "react-icons/fa";
 import { CgSpinner } from "react-icons/cg";
 import { Rnd } from "react-rnd";
+import { IoClose } from "react-icons/io5";
+import { cn } from "../lib/utils";
 
 interface CompilerProps {
   onClose: () => void;
+  style: string;
 }
 
 const DEFAULT_CODES: Record<string, string> = {
@@ -32,7 +35,7 @@ declare global {
   }
 }
 
-const Compiler: React.FC<CompilerProps> = ({ onClose }) => {
+const Compiler: React.FC<CompilerProps> = ({ onClose, style }) => {
   const [language, setLanguage] = useState("python");
   const [code, setCode] = useState(DEFAULT_CODES.python);
   const [output, setOutput] = useState("");
@@ -190,54 +193,113 @@ const Compiler: React.FC<CompilerProps> = ({ onClose }) => {
       minWidth={450}
       minHeight={350}>
       <section
-        className={`flex flex-col ${
-          isMaximized ? "w-full h-full" : "h-[75vh] w-[75vw]"
-        } bg-black text-white border border-white/15 rounded-lg shadow-xl overflow-hidden`}>
+        className={cn(
+          `flex flex-col ${isMaximized ? "w-full h-full" : "h-[75vh] w-[75vw]"} border border-white/15 shadow-xl overflow-hidden`,
+          style === "vite" && "rounded-lg bg-black",
+        )}>
         {/* Title Bar */}
-        <div className="handle cursor-grab flex items-center justify-between px-4 py-2 bg-white/4 shrink-0">
-          <div className="flex items-center gap-2">
-            <img className="size-5" src="/apps/compiler.png" alt="clock" />
-            <span className="text-sm font-medium">Compiler</span>
-          </div>
-          <div className="flex items-center gap-2 cursor-default">
-            <button
-              onClick={(e) => e.stopPropagation()}
-              className="size-4 bg-yellow-500 rounded-full hover:opacity-80"
-            />
-            <button
-              onClick={toggleMaximize}
-              className="size-4 bg-green-500 rounded-full hover:opacity-80"
-            />
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                onClose();
-              }}
-              className="size-4 bg-red-500 rounded-full hover:opacity-80"
-            />
-          </div>
+        <div
+          className={cn(
+            "handle cursor-grab flex items-center justify-between px-4 py-1",
+            style === "vite" && "bg-white/4",
+            style === "98" && "bg-linear-to-r from-[#020D88] to-[#107FCD]",
+          )}>
+          {style === "vite" && (
+            <>
+              <div className="flex items-center gap-2">
+                <img className="size-5" src="/apps/compiler.png" alt="clock" />
+                <span className="text-sm font-medium">Compiler</span>
+              </div>
+              <div className="flex items-center gap-2 cursor-default">
+                <button
+                  onClick={(e) => e.stopPropagation()}
+                  className="size-4 bg-yellow-500 rounded-full hover:opacity-80"
+                />
+                <button
+                  onClick={toggleMaximize}
+                  className="size-4 bg-green-500 rounded-full hover:opacity-80"
+                />
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onClose();
+                  }}
+                  className="size-4 bg-red-500 rounded-full hover:opacity-80"
+                />
+              </div>
+            </>
+          )}
+          {style === "98" && (
+            <>
+              <div className="flex items-center gap-2">
+                <img className="size-5" src="/apps/compiler.png" alt="clock" />
+                <span className="text-sm font-medium text-white">Compiler</span>
+              </div>
+              <div className="flex items-center gap-2 cursor-default">
+                <button
+                  onClick={(e) => e.stopPropagation()}
+                  className="bg-[#C0C0C0] size-4.5 flex items-center justify-center">
+                  <FaWindowMinimize className="text-black size-3" />
+                </button>
+                <button
+                  onClick={toggleMaximize}
+                  className="bg-[#C0C0C0] size-4.5 flex items-center justify-center">
+                  <FaRegWindowRestore className="text-black size-3" />
+                </button>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onClose();
+                  }}
+                  className="bg-[#C0C0C0] size-4.5 flex items-center justify-center">
+                  <IoClose className="text-black size-3" />
+                </button>
+              </div>
+            </>
+          )}
         </div>
 
-        <div className="h-0.5 w-full bg-white/15 shrink-0" />
-        <div className="bg-white/8 flex-1 flex flex-col py-3 px-3 overflow-hidden min-h-0">
+        {style === "vite" && <div className="h-0.5 w-full bg-white/15" />}
+        <div
+          className={cn(
+            "flex-1 flex flex-col py-3 px-3 overflow-hidden min-h-0",
+            style === "vite" && "bg-white/8",
+            style === "98" && "bg-[#c0c0c0]",
+          )}>
           {/* Language selection and code run button */}
           <div className="flex justify-center gap-3">
             <select
               value={language}
               onChange={(e) => handleLanguageChange(e.target.value)}
               disabled={isRunning}
-              className="bg-black/50 hover:bg-white/10 border border-white/16 rounded-md px-3 py-2 text-sm text-slate-100 focus:outline-none cursor-pointer">
-              <option value="python" className="bg-black">
+              className={cn(
+                "px-3 py-2 text-sm focus:outline-none",
+                style === "vite" &&
+                  "bg-black/50 hover:bg-white/10 cursor-pointer text-slate-100 border border-white/16 rounded-md",
+                style === "98" &&
+                  "bg-[#a9a9a9] shadow-[1px_1px_1px_1px_black,-1px_-1px_1px_1px_white] active:shadow-[-1px_-1px_1px_1px_black,1px_1px_1px_1px_white]",
+              )}>
+              <option
+                value="python"
+                className={cn(style === "vite" && "bg-black")}>
                 Python (Pyodide WASM)
               </option>
-              <option value="javascript" className="bg-black">
+              <option
+                value="javascript"
+                className={cn(style === "vite" && "bg-black")}>
                 JavaScript
               </option>
             </select>
             <button
               onClick={runCode}
               disabled={isRunning}
-              className="bg-black/50 hover:bg-white/10 border border-white/16 flex items-center px-4 rounded-md gap-2 cursor-pointer disabled:opacity-50 transition-colors">
+              className={cn(
+                "flex items-center px-4 gap-2 disabled:opacity-50",
+                style === "vite" &&
+                  "bg-black/50 hover:bg-white/10 border border-white/16 cursor-pointer rounded-md transition-colors",
+                style === "98" &&
+                  "bg-[#a9a9a9] shadow-[1px_1px_1px_1px_black,-1px_-1px_1px_1px_white] active:shadow-[-1px_-1px_1px_1px_black,1px_1px_1px_1px_white]",
+              )}>
               <span>{isRunning ? "Running..." : "Run"}</span>
               {isRunning ? (
                 <CgSpinner className="size-4 animate-spin" />
@@ -249,34 +311,68 @@ const Compiler: React.FC<CompilerProps> = ({ onClose }) => {
 
           <div className="flex-1 flex gap-2 min-h-0 mt-3">
             {/* Writing code */}
-            <div className="bg-white/5 w-1/2 p-3 overflow-hidden">
+            <div
+              className={cn(
+                "w-1/2 p-3 overflow-hidden",
+                style === "vite" && "bg-white/5",
+                style === "98" && "bg-[#a9a9a9] border-[#8a8a8a]",
+              )}>
               <textarea
                 value={code}
                 onChange={(e) => setCode(e.target.value)}
                 spellCheck={false}
-                className="w-full h-full bg-transparent text-white font-mono text-sm outline-none resize-none whitespace-pre overflow-x-auto"
+                className={cn(
+                  "w-full h-full bg-transparent font-mono text-sm outline-none resize-none whitespace-pre overflow-x-auto",
+                  style === "vite" && "text-white",
+                  style === "98" && "text-black",
+                )}
               />
             </div>
 
             {/* Code result terminal */}
-            <div className="bg-white/5 w-1/2 p-3 font-mono text-xs overflow-y-auto flex flex-col">
-              <span className="text-white/40 mb-2">// Execution Output</span>
+            <div
+              className={cn(
+                "w-1/2 p-3 font-mono text-xs overflow-y-auto flex flex-col",
+                style === "vite" && "bg-white/5",
+                style === "98" && "bg-[#a9a9a9] border-[#8a8a8a]",
+              )}>
+              <span
+                className={cn(
+                  "mb-2",
+                  style === "vite" && "text-white/40",
+                  style === "98" && "text-black",
+                )}>
+                // Execution Output
+              </span>
               {isPyodideLoading ? (
-                <div className="flex items-center gap-2 text-yellow-400 my-auto justify-center">
+                <div
+                  className={cn(
+                    "flex items-center gap-2 my-auto justify-center",
+                    style === "vite" && "text-yellow-400",
+                    style === "98" && "text-black",
+                  )}>
                   <CgSpinner className="animate-spin text-lg" />
                   <span>Loading Pyodide WebAssembly runtime...</span>
                 </div>
               ) : isRunning ? (
-                <div className="flex items-center gap-2 text-blue-400 my-auto justify-center">
+                <div
+                  className={cn(
+                    "flex items-center gap-2 my-auto justify-center",
+                    style === "vite" && "text-blue-400",
+                    style === "98" && "text-black",
+                  )}>
                   <CgSpinner className="animate-spin text-lg" />
                   <span>Executing code...</span>
                 </div>
               ) : output ? (
-                <pre className="whitespace-pre-wrap text-green-400">
-                  {output}
-                </pre>
+                <pre className="whitespace-pre-wrap">{output}</pre>
               ) : (
-                <span className="text-white/30 italic">
+                <span
+                  className={cn(
+                    "italic",
+                    style === "vite" && "text-white/30",
+                    style === "98" && "text-black",
+                  )}>
                   Press "Run" to execute your code.
                 </span>
               )}

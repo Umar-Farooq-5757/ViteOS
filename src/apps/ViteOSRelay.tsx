@@ -2,10 +2,13 @@ import React, { useEffect, useRef, useState } from "react";
 import { Rnd } from "react-rnd";
 import { supabase } from "../lib/supabase";
 import { formatDistanceToNow } from "date-fns";
-import { IoSendOutline } from "react-icons/io5";
+import { IoClose, IoSendOutline } from "react-icons/io5";
+import { FaRegWindowRestore, FaWindowMinimize } from "react-icons/fa";
+import { cn } from "../lib/utils";
 
 interface ViteOSRelayProps {
   onClose: () => void;
+  style: string;
 }
 interface Message {
   id: string;
@@ -22,7 +25,7 @@ interface UserProfile {
   passcode: string;
 }
 
-const ViteOSRelay: React.FC<ViteOSRelayProps> = ({ onClose }) => {
+const ViteOSRelay: React.FC<ViteOSRelayProps> = ({ onClose, style }) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState<string>("");
 
@@ -279,45 +282,113 @@ const ViteOSRelay: React.FC<ViteOSRelayProps> = ({ onClose }) => {
       bounds="parent"
       dragHandleClassName="handle">
       <section
-        className={`flex flex-col ${isMaximized ? "w-full h-full" : "h-120 w-150"} bg-black text-white border border-white/15 rounded-lg shadow-xl overflow-hidden`}>
+        className={cn(
+          `flex flex-col ${isMaximized ? "w-full h-full" : "h-120 w-150"} select-none border border-white/15 shadow-xl overflow-hidden`,
+          style === "vite" && "rounded-lg bg-black",
+        )}>
         {/* Title Bar */}
-        <div className="handle cursor-grab flex items-center justify-between px-4 py-2 bg-white/4">
-          <div className="flex items-center gap-2">
-            <img className="size-5" src="/apps/viteosrelay.png" alt="clock" />
-            <span className="text-sm font-medium">ViteOS Relay</span>
-          </div>
-          <div className="flex items-center gap-2 cursor-default">
-            <button
-              onClick={(e) => e.stopPropagation()}
-              className="size-4 bg-yellow-500 rounded-full hover:opacity-80"
-            />
-            <button
-              onClick={toggleMaximize}
-              className="size-4 bg-green-500 rounded-full hover:opacity-80"
-            />
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                onClose();
-              }}
-              className="size-4 bg-red-500 rounded-full hover:opacity-80"
-            />
-          </div>
+        <div
+          className={cn(
+            "handle cursor-grab flex items-center justify-between px-4 py-1",
+            style === "vite" && "bg-white/4",
+            style === "98" && "bg-linear-to-r from-[#020D88] to-[#107FCD]",
+          )}>
+          {style === "vite" && (
+            <>
+              <div className="flex items-center gap-2">
+                <img
+                  className="size-5"
+                  src="/apps/viteosrelay.png"
+                  alt="clock"
+                />
+                <span className="text-sm font-medium">ViteOS Relay</span>
+              </div>
+              <div className="flex items-center gap-2 cursor-default">
+                <button
+                  onClick={(e) => e.stopPropagation()}
+                  className="size-4 bg-yellow-500 rounded-full hover:opacity-80"
+                />
+                <button
+                  onClick={toggleMaximize}
+                  className="size-4 bg-green-500 rounded-full hover:opacity-80"
+                />
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onClose();
+                  }}
+                  className="size-4 bg-red-500 rounded-full hover:opacity-80"
+                />
+              </div>
+            </>
+          )}
+          {style === "98" && (
+            <>
+              <div className="flex items-center gap-2">
+                <img
+                  className="size-5"
+                  src="/apps/viteosrelay.png"
+                  alt="clock"
+                />
+                <span className="text-sm font-medium text-white">
+                  ViteOS Relay
+                </span>
+              </div>
+              <div className="flex items-center gap-2 cursor-default">
+                <button
+                  onClick={(e) => e.stopPropagation()}
+                  className="bg-[#C0C0C0] size-4.5 flex items-center justify-center">
+                  <FaWindowMinimize className="text-black size-3" />
+                </button>
+                <button
+                  onClick={toggleMaximize}
+                  className="bg-[#C0C0C0] size-4.5 flex items-center justify-center">
+                  <FaRegWindowRestore className="text-black size-3" />
+                </button>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onClose();
+                  }}
+                  className="bg-[#C0C0C0] size-4.5 flex items-center justify-center">
+                  <IoClose className="text-black size-3" />
+                </button>
+              </div>
+            </>
+          )}
         </div>
-
-        <div className="h-0.5 w-full bg-white/15" />
-        <div className="relative flex-1 min-h-0 flex flex-col bg-white/8">
+        {style === "vite" && <div className="h-0.5 w-full bg-white/15" />}
+        <div
+          className={cn(
+            "relative flex-1 min-h-0 flex flex-col",
+            style === "vite" && "bg-white/8",
+            style === "98" && "bg-[#c0c0c0]",
+          )}>
           {/* Compulsory Username Modal Overlay */}
           {!currentUser && (
             <div className="absolute inset-0 z-50 bg-white/4 backdrop-blur-[2px] flex items-center justify-center p-4">
               <form
                 onSubmit={handleSaveProfile}
-                className="bg-black/90 border border-slate-700 p-6 rounded-xl shadow-2xl max-w-sm w-full space-y-4">
+                className={cn(
+                  "border p-6 shadow-2xl max-w-sm w-full space-y-4",
+                  style === "vite" && "bg-black/90 rounded-xl border-slate-700",
+                  style === "98" && "bg-[#c0c0c0] border-[#8a8a8a]",
+                )}>
                 <div className="space-y-1 text-center">
-                  <h3 className="text-lg font-bold text-slate-100">
+                  <h3
+                    className={cn(
+                      "text-lg font-bold",
+                      style === "vite" && "text-slate-100",
+                      style === "98" && "text-black",
+                    )}>
                     {isExistingUser ? "Restore Account" : "Welcome to Relay"}
                   </h3>
-                  <p className="text-sm text-slate-400">
+                  <p
+                    className={cn(
+                      "text-sm",
+                      style === "vite" && "text-slate-400",
+                      style === "98" && "text-black/50",
+                    )}>
                     {isExistingUser
                       ? "Enter your passcode to restore your profile"
                       : "Choose a username and secret passcode to continue"}
@@ -326,7 +397,12 @@ const ViteOSRelay: React.FC<ViteOSRelayProps> = ({ onClose }) => {
 
                 <div className="space-y-3">
                   <div>
-                    <label className="block text-sm font-semibold text-slate-300 mb-1">
+                    <label
+                      className={cn(
+                        "block text-sm mb-1",
+                        style === "vite" && "text-slate-300 font-semibold",
+                        style === "98" && "text-black",
+                      )}>
                       Username <span className="text-red-400">*</span>
                     </label>
                     <input
@@ -339,11 +415,18 @@ const ViteOSRelay: React.FC<ViteOSRelayProps> = ({ onClose }) => {
                       }}
                       type="text"
                       placeholder="e.g. alex_dev"
-                      className={`w-full bg-slate-950 border ${
-                        usernameError
-                          ? "border-red-500 focus:border-red-500"
-                          : "border-slate-700 focus:border-purple-500"
-                      } rounded-md px-3 py-2 text-sm text-slate-100 focus:outline-none`}
+                      className={cn(
+                        `w-full border ${
+                          usernameError
+                            ? "border-red-500 focus:border-red-500"
+                            : style === "vite"
+                              ? "border-slate-700 focus:border-purple-500"
+                              : "border-[#8a8a8a]"
+                        } px-3 py-2 text-sm focus:outline-none`,
+                        style === "vite" &&
+                          "bg-slate-950 text-slate-100 rounded-md",
+                        style === "98" && "bg-[#b0b0b0]",
+                      )}
                     />
                     {usernameError && (
                       <p className="mt-1 text-[11px] text-red-400">
@@ -353,7 +436,12 @@ const ViteOSRelay: React.FC<ViteOSRelayProps> = ({ onClose }) => {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-semibold text-slate-300 mb-1">
+                    <label
+                      className={cn(
+                        "block text-sm mb-1",
+                        style === "vite" && "text-slate-300 font-semibold",
+                        style === "98" && "text-black",
+                      )}>
                       Secret Passcode / PIN{" "}
                       <span className="text-red-400">*</span>
                     </label>
@@ -366,19 +454,34 @@ const ViteOSRelay: React.FC<ViteOSRelayProps> = ({ onClose }) => {
                       }}
                       type="password"
                       placeholder="4-digit PIN or password"
-                      className="w-full bg-slate-950 border border-slate-700 rounded-md px-3 py-2 text-sm text-slate-100 focus:outline-none focus:border-purple-500"
+                      className={cn(
+                        "w-full border px-3 py-2 text-sm focus:outline-none",
+                        style === "vite" &&
+                          "bg-slate-950 border-slate-700 rounded-md text-slate-100 focus:border-purple-500",
+                        style === "98" && "bg-[#b0b0b0] border-[#8a8a8a]",
+                      )}
                     />
                   </div>
 
                   {!isExistingUser && (
                     <div>
-                      <label className="block text-sm font-semibold text-slate-300 mb-1">
+                      <label
+                        className={cn(
+                          "block text-sm mb-1",
+                          style === "vite" && "text-slate-300 font-semibold",
+                          style === "98" && "text-black",
+                        )}>
                         Badge Color
                       </label>
                       <select
                         value={inputColor}
                         onChange={(e) => setInputColor(e.target.value)}
-                        className="w-full bg-slate-950 border border-slate-700 rounded-md px-3 py-2 text-sm text-slate-100 focus:outline-none focus:border-purple-500 cursor-pointer">
+                        className={cn(
+                          "w-full border px-3 py-2 text-sm focus:outline-none",
+                          style === "vite" &&
+                            "bg-slate-950 rounded-md border-slate-700 text-slate-100 focus:border-purple-500",
+                          style === "98" && "bg-[#b0b0b0] border-[#8a8a8a]",
+                        )}>
                         <option value="purple">Purple</option>
                         <option value="yellow">Yellow</option>
                         <option value="blue">Blue</option>
@@ -395,7 +498,13 @@ const ViteOSRelay: React.FC<ViteOSRelayProps> = ({ onClose }) => {
                     !inputPasscode.trim() ||
                     isCheckingUsername
                   }
-                  className="w-full bg-purple-600 hover:bg-purple-500 disabled:opacity-50 text-white font-semibold py-2 rounded-md text-sm">
+                  className={cn(
+                    "w-full font-semibold py-2 text-sm",
+                    style === "vite" &&
+                      "bg-purple-600 hover:bg-purple-500 rounded-md text-white disabled:opacity-50",
+                    style === "98" &&
+                      "bg-[#8a8a8a] text-black disabled:opacity-75 shadow-[1px_1px_1px_1px_black,-1px_-1px_1px_1px_white] active:shadow-[-1px_-1px_1px_1px_black,1px_1px_1px_1px_white]",
+                  )}>
                   {isCheckingUsername
                     ? "Verifying..."
                     : isExistingUser
@@ -417,27 +526,52 @@ const ViteOSRelay: React.FC<ViteOSRelayProps> = ({ onClose }) => {
               return (
                 <div
                   key={msg.id}
-                  className="flex items-start gap-3 group hover:bg-white/8 p-1.5 rounded-md">
+                  className={cn(
+                    "flex items-start gap-3 group p-1.5",
+                    style === "vite" && "hover:bg-white/8 rounded-md",
+                    style === "98" && "bg-[#a9a9a9] text-black px-4",
+                  )}>
+                  {style === "98" && (
+                    <div
+                      className={`${msg.user_color === "purple" ? "bg-purple-500" : msg.user_color === "yellow" ? "bg-yellow-400" : msg.user_color === "blue" ? "bg-blue-500" : msg.user_color === "emerald" && "bg-emerald-400"} size-2`}></div>
+                  )}
                   {/* User Avatar */}
-                  <div
-                    className={`size-8 rounded-lg flex items-center justify-center font-bold text-sm border ${colorStyle.bg} ${colorStyle.text} shrink-0`}>
-                    {avatarChar}
-                  </div>
+                  {style === "vite" && (
+                    <div
+                      className={`size-8 rounded-lg flex items-center justify-center font-bold text-sm border ${colorStyle.bg} ${colorStyle.text} shrink-0`}>
+                      {avatarChar}
+                    </div>
+                  )}
 
                   {/* Message Content */}
                   <div className="flex-1 min-w-0 space-y-0.5">
                     <div className="flex items-baseline gap-2">
-                      <span className={`text-sm font-bold ${colorStyle.text}`}>
+                      <span
+                        className={cn(
+                          `text-sm font-bold`,
+                          style === "vite" && `${colorStyle.text}`,
+                          style === "98" && "text-black",
+                        )}>
                         {msg.username}
                       </span>
-                      <span className="text-[10px] text-slate-500">
+                      <span
+                        className={cn(
+                          "text-[10px]",
+                          style === "vite" && "text-slate-500",
+                          style === "98" && "text-black",
+                        )}>
                         {msg.created_at &&
                           formatDistanceToNow(new Date(msg.created_at), {
                             addSuffix: true,
                           })}
                       </span>
                     </div>
-                    <p className="text-sm text-slate-200 leading-relaxed wrap-break-word">
+                    <p
+                      className={cn(
+                        "text-sm leading-relaxed wrap-break-word",
+                        style === "vite" && "text-slate-200",
+                        style === "98" && "text-black",
+                      )}>
                       {msg.content}
                     </p>
                   </div>
@@ -447,11 +581,20 @@ const ViteOSRelay: React.FC<ViteOSRelayProps> = ({ onClose }) => {
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Slack-like Input Bar */}
+          {/* Input Bar */}
           <form
             onSubmit={handleSendMessage}
-            className="p-3 bg-black/50 border-t border-slate-800">
-            <div className="bg-white/4 border border-slate-700/80 rounded-lg p-2 focus-within:border-white">
+            className={cn(
+              "p-3 border-t border-slate-800",
+              style === "vite" && "bg-black/50",
+              style === "98" && "bg-[#a9a9a9]",
+            )}>
+            <div
+              className={cn(
+                "border border-slate-700/80 p-2",
+                style === "vite" &&
+                  "bg-white/4 focus-within:border-white rounded-lg",
+              )}>
               <input
                 type="text"
                 value={newMessage}
@@ -461,14 +604,25 @@ const ViteOSRelay: React.FC<ViteOSRelayProps> = ({ onClose }) => {
                     ? `Message #global as ${currentUser.username}...`
                     : "Type a message..."
                 }
-                className="w-full bg-transparent text-sm text-slate-100 placeholder-slate-500 focus:outline-none"
+                className={cn(
+                  "w-full bg-transparent text-sm focus:outline-none",
+                  style === "vite" && "text-slate-100 placeholder-slate-500",
+                )}
               />
               <div className="flex justify-between items-center mt-2 pt-2 border-t border-slate-800">
-                <div className="text-[10px] text-slate-400 font-mono flex items-center gap-1">
+                <div
+                  className={cn(
+                    "text-[10px] font-mono flex items-center gap-1",
+                    style === "vite" && "text-slate-400",
+                  )}>
                   <span>Posting as</span>
                   {currentUser && (
                     <span
-                      className={`font-semibold ${getColorClasses(currentUser.color).text}`}>
+                      className={cn(
+                        `font-semibold`,
+                        style === "vite" &&
+                          `${getColorClasses(currentUser.color).text}`,
+                      )}>
                       @{currentUser.username}
                     </span>
                   )}
@@ -476,8 +630,14 @@ const ViteOSRelay: React.FC<ViteOSRelayProps> = ({ onClose }) => {
                 <button
                   type="submit"
                   disabled={!newMessage.trim()}
-                  className="bg-purple-600 hover:bg-purple-500 disabled:opacity-40 text-white px-2.5 py-1 rounded text-sm font-semibold flex items-center gap-1 cursor-pointer">
-                  Send <IoSendOutline size={12} />
+                  className={cn(
+                    "px-2.5 py-1 text-sm flex items-center gap-1",
+                    style === "vite" &&
+                      "text-white bg-purple-600 hover:bg-purple-500 font-semibold cursor-pointer disabled:opacity-40 rounded",
+                    style === "98" &&
+                      "text-black bg-[#a9a9a9] shadow-[1px_1px_1px_1px_black,-1px_-1px_1px_1px_white] active:shadow-[-1px_-1px_1px_1px_black,1px_1px_1px_1px_white]",
+                  )}>
+                  Send {style === "vite" && <IoSendOutline size={12} />}
                 </button>
               </div>
             </div>

@@ -79,37 +79,36 @@ function App() {
         </div>
       </div>
       {style === "vite" && <UniqueClock />}
-      <div className="fixed bottom-4 left-4 flex flex-col items-center">
+      <div className="fixed bottom-4 left-4 flex flex-col gap-1 items-center">
         <div className="bg-white/20 backdrop-blur-md overflow-hidden rounded-md flex items-center transition-all duration-500">
           <button
             onClick={() => setStyle("vite")}
-            className={`${style === "vite" && "bg-white/35"} p-3 transition-all duration-500`}>
-            <img className="size-7" src="/favicon.svg" alt="" />
+            className={`${style === "vite" && "bg-white/35"} p-2 transition-all duration-500`}>
+            <img className="size-6" src="/favicon.svg" alt="" />
           </button>
           <button
             onClick={() => setStyle("98")}
-            className={`${style === "98" && "bg-white/35"} p-3 transition-all duration-500`}>
-            {" "}
-            <img className="size-7" src="/w98.png" alt="" />
+            className={`${style === "98" && "bg-white/35"} p-2 transition-all duration-500`}>
+            <img className="size-6" src="/w98.png" alt="" />
           </button>
         </div>
-          <p className="text-sm opacity-60">Change style</p>
+          <p className="text-xs opacity-60">Change style</p>
       </div>
-      {isNotesOpen && <Notes onClose={() => setIsNotesOpen(false)} />}
+      {isNotesOpen && <Notes style={style} onClose={() => setIsNotesOpen(false)} />}
       {isPhotosOpen && (
         <Photos style={style} onClose={() => setIsPhotosOpen(false)} />
       )}
       {isClockOpen && (
         <Clock style={style} onClose={() => setIsClockOpen(false)} />
       )}
-      {isAmbienceOpen && <Ambience onClose={() => setIsAmbienceOpen(false)} />}
+      {isAmbienceOpen && <Ambience style={style} onClose={() => setIsAmbienceOpen(false)} />}
       {isViteOSRelayOpen && (
-        <ViteOSRelay onClose={() => setIsViteOSRelayOpen(false)} />
+        <ViteOSRelay style={style} onClose={() => setIsViteOSRelayOpen(false)} />
       )}
       {isNpmExplorerOpen && (
-        <NpmExplorer onClose={() => setIsNpmExplorerOpen(false)} />
+        <NpmExplorer style={style} onClose={() => setIsNpmExplorerOpen(false)} />
       )}
-      {isCompilerOpen && <Compiler onClose={() => setIsCompilerOpen(false)} />}
+      {isCompilerOpen && <Compiler style={style} onClose={() => setIsCompilerOpen(false)} />}
     </main>
   );
 }

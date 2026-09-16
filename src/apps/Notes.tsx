@@ -1,17 +1,25 @@
 import type React from "react";
 import { useState, useEffect } from "react";
-import { FaPlus, FaTrash } from "react-icons/fa";
+import {
+  FaPlus,
+  FaRegWindowRestore,
+  FaTrash,
+  FaWindowMinimize,
+} from "react-icons/fa";
+import { IoClose } from "react-icons/io5";
 import { Rnd } from "react-rnd";
+import { cn } from "../lib/utils";
 
 interface NotesProps {
   onClose: () => void;
+  style: string;
 }
 interface Note {
   title: string;
   content: string;
 }
 
-const Notes: React.FC<NotesProps> = ({ onClose }) => {
+const Notes: React.FC<NotesProps> = ({ onClose, style }) => {
   const [isMaximized, setIsMaximized] = useState(false);
   const [prevSize, setPrevSize] = useState<{
     width: number | string;
@@ -160,55 +168,126 @@ const Notes: React.FC<NotesProps> = ({ onClose }) => {
       bounds="parent"
       dragHandleClassName="handle">
       <section
-        className={`flex flex-col ${isMaximized ? "w-full h-full" : "h-120 w-170"} bg-black text-white border border-slate-700 rounded-lg shadow-xl overflow-hidden select-none`}>
-        <div className="handle cursor-grab flex items-center justify-between px-4 py-2 bg-white/4">
-          <div className="flex items-center gap-2">
-            <img className="size-5" src="/apps/notes.png" alt="clock" />
-            <span className="text-sm font-medium">Notes</span>
-          </div>
-          <div className="flex items-center gap-2 cursor-default">
-            <button
-              onClick={(e) => e.stopPropagation()}
-              className="size-4 bg-yellow-500 rounded-full hover:opacity-80"
-            />
-            <button
-              onClick={toggleMaximize}
-              className="size-4 bg-green-500 rounded-full hover:opacity-80"
-            />
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                onClose();
-              }}
-              className="size-4 bg-red-500 rounded-full hover:opacity-80"
-            />
-          </div>
+        className={cn(
+          `flex flex-col ${isMaximized ? "w-full h-full" : "h-120 w-150"} select-none border border-white/15 shadow-xl overflow-hidden`,
+          style === "vite" && "rounded-lg bg-black",
+        )}>
+        {/* Title Bar */}
+        <div
+          className={cn(
+            "handle cursor-grab flex items-center justify-between px-4 py-1",
+            style === "vite" && "bg-white/4",
+            style === "98" && "bg-linear-to-r from-[#020D88] to-[#107FCD]",
+          )}>
+          {style === "vite" && (
+            <>
+              <div className="flex items-center gap-2">
+                <img className="size-5" src="/apps/notes.png" alt="clock" />
+                <span className="text-sm font-medium">Notes</span>
+              </div>
+              <div className="flex items-center gap-2 cursor-default">
+                <button
+                  onClick={(e) => e.stopPropagation()}
+                  className="size-4 bg-yellow-500 rounded-full hover:opacity-80"
+                />
+                <button
+                  onClick={toggleMaximize}
+                  className="size-4 bg-green-500 rounded-full hover:opacity-80"
+                />
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onClose();
+                  }}
+                  className="size-4 bg-red-500 rounded-full hover:opacity-80"
+                />
+              </div>
+            </>
+          )}
+          {style === "98" && (
+            <>
+              <div className="flex items-center gap-2">
+                <img className="size-5" src="/apps/notes.png" alt="clock" />
+                <span className="text-sm font-medium text-white">Notes</span>
+              </div>
+              <div className="flex items-center gap-2 cursor-default">
+                <button
+                  onClick={(e) => e.stopPropagation()}
+                  className="bg-[#C0C0C0] size-4.5 flex items-center justify-center">
+                  <FaWindowMinimize className="text-black size-3" />
+                </button>
+                <button
+                  onClick={toggleMaximize}
+                  className="bg-[#C0C0C0] size-4.5 flex items-center justify-center">
+                  <FaRegWindowRestore className="text-black size-3" />
+                </button>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onClose();
+                  }}
+                  className="bg-[#C0C0C0] size-4.5 flex items-center justify-center">
+                  <IoClose className="text-black size-3" />
+                </button>
+              </div>
+            </>
+          )}
         </div>
-        <div className="h-0.5 w-full bg-slate-700"></div>
-        <div className="rounded-b-lg flex gap-2 p-0.5 h-full overflow-y-auto">
-          <div className="bg-white/8 w-40 px-2 py-2 rounded-md overflow-y-auto">
+        {style === "vite" && <div className="h-0.5 w-full bg-white/15" />}
+        <div
+          className={cn(
+            "flex gap-2 p-0.5 h-full overflow-y-auto",
+            style === "vite" && "rounded-b-lg",
+            style === "98" && "bg-[#a1a1a1]",
+          )}>
+          <div
+            className={cn(
+              "w-40 px-2 py-2 overflow-y-auto",
+              style === "vite" && "bg-white/8 rounded-md",
+              style === "98" && "bg-[#c0c0c0]",
+            )}>
             {notes.map((note) => (
               <div
                 key={note.title}
-                className={`group flex items-center justify-between hover:bg-white/15 px-2 py-2 rounded-md cursor-pointer ${
-                  currentNote === note.title && "bg-white/15"
-                }`}
+                className={cn(
+                  `group flex items-center justify-between px-2 py-2`,
+                  style === "vite" &&
+                    `hover:bg-white/15 rounded-md cursor-pointer ${
+                      currentNote === note.title && "bg-white/15"
+                    }`,
+                  style === "98" &&
+                    "border-dashed border border-[#c0c0c0] hover:border-black",
+                )}
                 onClick={() => setCurrentNote(note.title)}>
                 <span className="truncate pr-2">{note.title}</span>
                 <button
                   onClick={(e) => deleteNote(e, note.title)}
-                  className="text-slate-400 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity p-1">
+                  className={cn(
+                    "hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity p-1",
+                    style === "vite" && "text-slate-400",
+                  )}>
                   <FaTrash className="size-3" />
                 </button>
               </div>
             ))}
             <div
               onClick={createNewNote}
-              className="hover:bg-slate-700 px-2 py-2 rounded-md border border-dashed border-slate-400 mt-2 cursor-pointer">
+              className={cn(
+                "px-2 py-2 mt-2",
+                style === "vite" &&
+                  "hover:bg-slate-700 border-slate-400 border border-dashed rounded-md",
+                style === "98" &&
+                  "border-dashed border border-[#c0c0c0] hover:border-black bg-[#b2b2b2] shadow-[1px_1px_1px_1px_black,-1px_-1px_1px_1px_white] active:shadow-[-1px_-1px_1px_1px_black,1px_1px_1px_1px_white]",
+              )}>
               <FaPlus className="size-4 mx-auto" />
             </div>
           </div>
-          <div className="bg-white/8 grow px-2 py-1 rounded-md overflow-y-auto">
+          <div
+            className={cn(
+              "grow px-2 py-1 overflow-y-auto",
+              style === "vite" && "bg-white/8 rounded-md",
+              style === "98" && "bg-[#c0c0c0]",
+            )}>
             {notes.length > 0 ? (
               <div>
                 <input
@@ -220,6 +299,7 @@ const Notes: React.FC<NotesProps> = ({ onClose }) => {
                 <textarea
                   value={contentInput}
                   onChange={handleContentChange}
+                  placeholder="Type here..."
                   className="w-full h-105 outline-none bg-transparent resize-none"
                 />
               </div>
