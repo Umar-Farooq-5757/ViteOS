@@ -9,8 +9,6 @@ import UniqueClock from "./components/UniqueClock";
 import NpmExplorer from "./apps/NpmExplorer";
 import Compiler from "./apps/Compiler";
 import { cn } from "./lib/utils";
-import Browser from "./apps/Browser";
-import StorageLab from "./apps/StorageLab";
 
 function App() {
   const [isNotesOpen, setIsNotesOpen] = useState<boolean>(false);
@@ -20,8 +18,6 @@ function App() {
   const [isViteOSRelayOpen, setIsViteOSRelayOpen] = useState<boolean>(false);
   const [isNpmExplorerOpen, setIsNpmExplorerOpen] = useState<boolean>(false);
   const [isCompilerOpen, setIsCompilerOpen] = useState<boolean>(false);
-  const [isBrowserOpen, setIsBrowserOpen] = useState<boolean>(false);
-  const [isStorageLabOpen, setIsStorageLabOpen] = useState<boolean>(false);
 
   const [style, setStyle] = useState<string>(
     localStorage.getItem("uiStyle") || "vite",
@@ -91,20 +87,6 @@ function App() {
           className="flex flex-col items-center gap-2">
           <img className="size-14" src="/apps/photos.png" alt="" />
           <p className="text-xs">Photos</p>
-        </div>
-        <div
-          onClick={() => setIsBrowserOpen(true)}
-          onDoubleClick={() => setIsBrowserOpen(true)}
-          className="flex flex-col items-center gap-2">
-          <img className="size-14" src="/apps/browser.png" alt="" />
-          <p className="text-xs">Browser</p>
-        </div>
-        <div
-          onClick={() => setIsStorageLabOpen(true)}
-          onDoubleClick={() => setIsStorageLabOpen(true)}
-          className="flex flex-col items-center gap-2">
-          <img className="size-14" src="/apps/storagelab.png" alt="" />
-          <p className="text-xs">Storage Lab</p>
         </div>
       </div>
       {style === "vite" && <UniqueClock />}
@@ -183,22 +165,6 @@ function App() {
           onClose={() => setIsCompilerOpen(false)}
           onFocus={() => bringToFront("compiler")}
           zIndex={windowZIndexes.compiler ?? 100}
-        />
-      )}
-      {isBrowserOpen && (
-        <Browser
-          style={style}
-          onClose={() => setIsBrowserOpen(false)}
-          onFocus={() => bringToFront("browser")}
-          zIndex={windowZIndexes.browser ?? 100}
-        />
-      )}
-      {isStorageLabOpen && (
-        <StorageLab
-          style={style}
-          onClose={() => setIsStorageLabOpen(false)}
-          onFocus={() => bringToFront("storagelab")}
-          zIndex={windowZIndexes.storagelab ?? 100}
         />
       )}
     </main>

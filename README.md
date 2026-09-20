@@ -17,8 +17,6 @@ A webos that runs in the browser. Built for hackclub's stardance challenge.
 - Node Explorer: Browse, search, and explore npm packages and get insights.
 - Ambience: Play multiple sounds and enjoy the voice.
 - Compiler
-- Browser: Visit different websites.
-- Storage Lab: Visualize, add, edit, delete browser storage (localstorage, session storage, indexedDB)
 
 ---
 
