@@ -8,9 +8,11 @@ import { IoClose } from "react-icons/io5";
 interface ClockProps {
   onClose: () => void;
   style: string;
+  onFocus: () => void;
+  zIndex: number;
 }
 
-const Clock: React.FC<ClockProps> = ({ onClose, style }) => {
+const Clock: React.FC<ClockProps> = ({ onClose, style, onFocus, zIndex }) => {
   const [now, setNow] = useState(new Date());
   const [isMaximized, setIsMaximized] = useState(false);
   const [prevSize, setPrevSize] = useState<{
@@ -76,6 +78,8 @@ const Clock: React.FC<ClockProps> = ({ onClose, style }) => {
 
   return (
     <Rnd
+      onMouseDown={onFocus}
+      style={{ zIndex }}
       size={
         isMaximized
           ? { width: "100%", height: "100%" }

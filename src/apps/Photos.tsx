@@ -13,9 +13,11 @@ import { MdOutlineNavigateBefore, MdOutlineNavigateNext } from "react-icons/md";
 interface PhotosProps {
   onClose: () => void;
   style: string;
+  onFocus: () => void;
+  zIndex: number;
 }
 
-const Photos: React.FC<PhotosProps> = ({ onClose, style }) => {
+const Photos: React.FC<PhotosProps> = ({ onClose, style, onFocus, zIndex }) => {
   const images = ["/gallery/1.jpg", "/gallery/2.jpg", "/gallery/3.jpg"];
   const [currentImage, setCurrentImage] = useState<number | null>(null);
 
@@ -82,6 +84,8 @@ const Photos: React.FC<PhotosProps> = ({ onClose, style }) => {
   };
   return (
     <Rnd
+      onMouseDown={onFocus}
+      style={{ zIndex }}
       size={
         isMaximized
           ? { width: "100%", height: "100%" }

@@ -9,6 +9,8 @@ import { cn } from "../lib/utils";
 interface ViteOSRelayProps {
   onClose: () => void;
   style: string;
+  onFocus: () => void;
+  zIndex: number;
 }
 interface Message {
   id: string;
@@ -25,7 +27,12 @@ interface UserProfile {
   passcode: string;
 }
 
-const ViteOSRelay: React.FC<ViteOSRelayProps> = ({ onClose, style }) => {
+const ViteOSRelay: React.FC<ViteOSRelayProps> = ({
+  onClose,
+  style,
+  onFocus,
+  zIndex,
+}) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState<string>("");
 
@@ -255,6 +262,8 @@ const ViteOSRelay: React.FC<ViteOSRelayProps> = ({ onClose, style }) => {
 
   return (
     <Rnd
+      onMouseDown={onFocus}
+      style={{ zIndex }}
       size={
         isMaximized
           ? { width: "100%", height: "100%" }

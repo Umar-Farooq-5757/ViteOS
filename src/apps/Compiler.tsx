@@ -8,21 +8,23 @@ import { cn } from "../lib/utils";
 interface CompilerProps {
   onClose: () => void;
   style: string;
+  onFocus: () => void;
+  zIndex: number;
 }
 
 const DEFAULT_CODES: Record<string, string> = {
   python: `# Python WebAssembly Execution
 def greet(name):
-    return f"Hello, {name} from Pyodide (WASM)!"
+    return f"Hello, {name}"
 
-print(greet("WebOS User"))
+print(greet("ViteOS User"))
 for i in range(1, 4):
     print(f"Counting: {i}")
 `,
   javascript: `// JavaScript Browser V8 Execution
 const greet = (name) => \`Hello, \${name} from JS Engine!\`;
 
-console.log(greet("WebOS User"));
+console.log(greet("ViteOS User"));
 [1, 2, 3].forEach((i) => console.log(\`Counting: \${i}\`));
 `,
 };
@@ -35,7 +37,12 @@ declare global {
   }
 }
 
-const Compiler: React.FC<CompilerProps> = ({ onClose, style }) => {
+const Compiler: React.FC<CompilerProps> = ({
+  onClose,
+  style,
+  onFocus,
+  zIndex,
+}) => {
   const [language, setLanguage] = useState("python");
   const [code, setCode] = useState(DEFAULT_CODES.python);
   const [output, setOutput] = useState("");
@@ -164,6 +171,8 @@ const Compiler: React.FC<CompilerProps> = ({ onClose, style }) => {
 
   return (
     <Rnd
+      onMouseDown={onFocus}
+      style={{ zIndex }}
       size={
         isMaximized
           ? { width: "100%", height: "100%" }
@@ -282,7 +291,7 @@ const Compiler: React.FC<CompilerProps> = ({ onClose, style }) => {
               <option
                 value="python"
                 className={cn(style === "vite" && "bg-black")}>
-                Python (Pyodide WASM)
+                Python
               </option>
               <option
                 value="javascript"

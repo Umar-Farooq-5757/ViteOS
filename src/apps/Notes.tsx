@@ -13,13 +13,15 @@ import { cn } from "../lib/utils";
 interface NotesProps {
   onClose: () => void;
   style: string;
+  onFocus: () => void;
+  zIndex: number;
 }
 interface Note {
   title: string;
   content: string;
 }
 
-const Notes: React.FC<NotesProps> = ({ onClose, style }) => {
+const Notes: React.FC<NotesProps> = ({ onClose, style, onFocus, zIndex }) => {
   const [isMaximized, setIsMaximized] = useState(false);
   const [prevSize, setPrevSize] = useState<{
     width: number | string;
@@ -141,6 +143,8 @@ const Notes: React.FC<NotesProps> = ({ onClose, style }) => {
 
   return (
     <Rnd
+      onMouseDown={onFocus}
+      style={{ zIndex }}
       size={
         isMaximized
           ? { width: "100%", height: "100%" }
