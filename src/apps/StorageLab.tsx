@@ -240,23 +240,23 @@ const StorageLab: React.FC<StorageLabProps> = ({
     x: number;
     y: number;
   }>({
-    width: 820,
-    height: 560,
-    x: 120,
-    y: 90,
+    width: "75vw",
+    height: "75vh",
+    x: 100,
+    y: 50,
   });
+
   const [currentSize, setCurrentSize] = useState<{
     width: number | string;
     height: number | string;
     x: number;
     y: number;
   }>({
-    width: 820,
-    height: 560,
-    x: 120,
-    y: 90,
+    width: "75vw",
+    height: "75vh",
+    x: 100,
+    y: 50,
   });
-
   const toggleMaximize = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (isMaximized) {

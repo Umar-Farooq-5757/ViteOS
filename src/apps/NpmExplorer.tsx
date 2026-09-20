@@ -102,21 +102,22 @@ const NpmExplorer: React.FC<NpmExplorerProps> = ({
     x: number;
     y: number;
   }>({
-    width: 700,
-    height: 500,
-    x: 150,
-    y: 150,
+    width: "75vw",
+    height: "75vh",
+    x: 100,
+    y: 50,
   });
+
   const [currentSize, setCurrentSize] = useState<{
     width: number | string;
     height: number | string;
     x: number;
     y: number;
   }>({
-    width: 700,
-    height: 500,
-    x: 150,
-    y: 150,
+    width: "75vw",
+    height: "75vh",
+    x: 100,
+    y: 50,
   });
 
   const toggleMaximize = (e: React.MouseEvent) => {
@@ -172,11 +173,11 @@ const NpmExplorer: React.FC<NpmExplorerProps> = ({
       enableResizing={!isMaximized}
       bounds="parent"
       dragHandleClassName="handle"
-      minWidth={450}
-      minHeight={350}>
+      minWidth={560}
+      minHeight={380}>
       <section
         className={cn(
-          `flex flex-col ${isMaximized ? "w-full h-full" : "h-[75vh] w-[75vw]"} select-none border border-white/15 shadow-xl overflow-hidden`,
+          "flex flex-col w-full h-full select-none border border-white/15 shadow-xl overflow-hidden",
           style === "vite" && "rounded-lg bg-black",
         )}>
         {/* Title Bar */}

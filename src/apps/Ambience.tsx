@@ -25,21 +25,22 @@ const Ambience: React.FC<AmbienceProps> = ({
     x: number;
     y: number;
   }>({
-    width: 400,
-    height: 300,
+    width: "50vw",
+    height: "50vh",
     x: 100,
-    y: 100,
+    y: 50,
   });
+
   const [currentSize, setCurrentSize] = useState<{
     width: number | string;
     height: number | string;
     x: number;
     y: number;
   }>({
-    width: 400,
-    height: 300,
+    width: "50vw",
+    height: "50vh",
     x: 100,
-    y: 100,
+    y: 50,
   });
 
   const toggleMaximize = (e: React.MouseEvent) => {
@@ -87,10 +88,12 @@ const Ambience: React.FC<AmbienceProps> = ({
       disableDragging={isMaximized}
       enableResizing={!isMaximized}
       bounds="parent"
-      dragHandleClassName="handle">
+      dragHandleClassName="handle"
+      minWidth={560}
+      minHeight={380}>
       <section
         className={cn(
-          `flex flex-col ${isMaximized ? "w-full h-full" : "h-120 w-150"} border border-white/15 shadow-xl overflow-hidden`,
+          "flex flex-col w-full h-full select-none border border-white/15 shadow-xl overflow-hidden",
           style === "vite" && "rounded-lg bg-black",
         )}>
         {/* Title Bar */}

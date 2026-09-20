@@ -227,21 +227,22 @@ const ViteOSRelay: React.FC<ViteOSRelayProps> = ({
     x: number;
     y: number;
   }>({
-    width: 400,
-    height: 300,
-    x: 250,
-    y: 250,
+    width: "75vw",
+    height: "75vh",
+    x: 100,
+    y: 50,
   });
+
   const [currentSize, setCurrentSize] = useState<{
     width: number | string;
     height: number | string;
     x: number;
     y: number;
   }>({
-    width: 400,
-    height: 300,
-    x: 250,
-    y: 250,
+    width: "75vw",
+    height: "75vh",
+    x: 100,
+    y: 50,
   });
 
   const toggleMaximize = (e: React.MouseEvent) => {
@@ -289,10 +290,12 @@ const ViteOSRelay: React.FC<ViteOSRelayProps> = ({
       disableDragging={isMaximized}
       enableResizing={!isMaximized}
       bounds="parent"
-      dragHandleClassName="handle">
+      dragHandleClassName="handle"
+      minWidth={560}
+      minHeight={380}>
       <section
         className={cn(
-          `flex flex-col ${isMaximized ? "w-full h-full" : "h-120 w-150"} select-none border border-white/15 shadow-xl overflow-hidden`,
+          "flex flex-col w-full h-full select-none border border-white/15 shadow-xl overflow-hidden",
           style === "vite" && "rounded-lg bg-black",
         )}>
         {/* Title Bar */}

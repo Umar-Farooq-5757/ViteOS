@@ -4,7 +4,7 @@ A webos that runs in the browser. Built for hackclub's stardance challenge.
 ---
 
 ### Features & Apps:
-- Multiple draggable windows.
+- Multiple draggable and resizable windows.
 - Windows like interface.
 - Clock app:
     - Analog clock
